@@ -18,6 +18,9 @@ class TelegramEvent:
         self.chat_id: int = update.effective_chat.id  # for convenience
         self.vars = context.chat_data  # for convenience
 
+    def reply(self, text: str, **kwargs):
+        self.context.bot.send_message(text, chat_id=self.update.effective_chat.id, **kwargs)
+
 
 class TelegramFunctionBlueprint:
 

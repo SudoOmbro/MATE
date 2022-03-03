@@ -7,9 +7,11 @@ from MateWrapper.generics import TelegramEvent
     CONTEXT_VARIABLE,
     CONTEXT_DICT,
     CONTEXT_OBJECT,
-    UPDATE
+    UPDATE_USER,
+    UPDATE_TEXT,
+    UPDATE_QUERY
 
-] = range(4)
+] = range(6)
 
 
 class MATEVarHandler:
@@ -43,17 +45,26 @@ class MATEVarHandler:
         self.logic: callable = handlers[0]
         if handlers[1]:
             self.args = handlers[1](target)
+        else:
+            self.args = target
 
     @staticmethod
     def __get_access_type(target: str):
-        if target.find(":"):
+        if target.find(":") != -1:
             return CONTEXT_DICT
-        elif target.find("."):
+        elif target.find(".") != -1:
             return CONTEXT_OBJECT
         elif target[:2] == "__":
-            return UPDATE
+            return UPDATE_USER
+        elif target == "_text":
+            return UPDATE_TEXT
+        elif target == "_query":
+            return UPDATE_QUERY
         else:
             return CONTEXT_VARIABLE
+
+    def __str__(self):
+        return str(self.__dict__)
 
 
 class MATEVarGetter(MATEVarHandler):
@@ -67,8 +78,14 @@ class MATEVarGetter(MATEVarHandler):
     def __get_object(self, event: TelegramEvent):
         return event.context.chat_data[self.args[0]].__dict__[self.args[1]]
 
-    def __get_from_update(self, event: TelegramEvent):
+    def __get_from_update_user(self, event: TelegramEvent):
         return event.update.effective_user[self.args]
+
+    def __get_update_text(self, event: TelegramEvent):
+        return event.update.message.text
+
+    def __get_update_query(self, event: TelegramEvent):
+        return event.update.callback_query.data
 
     HANDLERS = {
         CONTEXT_VARIABLE: (
@@ -80,12 +97,20 @@ class MATEVarGetter(MATEVarHandler):
             lambda target: target.split(":")
         ),
         CONTEXT_OBJECT: (
-            __get_dict,
+            __get_object,
             lambda target: target.split(".")
         ),
-        UPDATE: (
-            __get_from_update,
+        UPDATE_USER: (
+            __get_from_update_user,
             lambda target: target[2:]
+        ),
+        UPDATE_TEXT: (
+            __get_update_text,
+            None
+        ),
+        UPDATE_QUERY: (
+            __get_update_query,
+            None
         )
     }
 

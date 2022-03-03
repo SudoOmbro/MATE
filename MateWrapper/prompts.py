@@ -13,11 +13,11 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+log = logging.getLogger()
+log.setLevel(logging.INFO)
 
 
-FORMATTING_REGEX = r"\{([a-zA-Z]+)\}"
+FORMATTING_REGEX = r"\{([a-zA-Z_:.]+)\}"
 
 
 # Formatting ----
@@ -25,7 +25,8 @@ FORMATTING_REGEX = r"\{([a-zA-Z]+)\}"
 def _format_message(message_text: str, variables: Dict[str, MATEVarGetter], event: TelegramEvent) -> str:
     result_message = message_text
     for var in variables:
-        result_message = result_message.replace(f"{{{var}}}", variables[var].logic(event))
+        getter = variables[var]
+        result_message = result_message.replace(f"{{{var}}}", getter.logic(getter, event))
     return result_message
 
 
@@ -234,6 +235,6 @@ class Prompt(TelegramFunctionBlueprint):
                     last_message_id
                 )
             except Exception as e:
-                logger.error(f"error while trying to delete message: {e}, update: {event.update.to_dict()}")
+                log.error(f"error while trying to delete message: {e}, update: {event.update.to_dict()}")
         self.behaviour(self.text, self.keyboard, event)
         return self.return_value
