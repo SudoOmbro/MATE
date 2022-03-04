@@ -26,7 +26,7 @@ def _format_message(message_text: str, variables: Dict[str, MATEVarGetter], even
     result_message = message_text
     for var in variables:
         getter = variables[var]
-        result_message = result_message.replace(f"{{{var}}}", getter.logic(getter, event))
+        result_message = result_message.replace(f"{{{var}}}", str(getter.logic(getter, event)))
     return result_message
 
 
