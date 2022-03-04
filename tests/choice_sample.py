@@ -56,6 +56,7 @@ def main():
         },
         fallbacks=[CommandHandler("end", END_PROMPT)]
     ))
+    bot.add_handler(CommandHandler("about", Prompt("This bot was made by @LordOmbro")))
     bot.start_and_idle()
 
 
