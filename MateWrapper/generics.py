@@ -31,7 +31,7 @@ class TelegramFunctionBlueprint:
         return str(self.__dict__)
 
     def logic(self, event: TelegramEvent):
-        pass
+        raise NotImplemented
 
 
 class Chain:

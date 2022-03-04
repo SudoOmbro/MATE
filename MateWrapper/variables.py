@@ -100,8 +100,7 @@ class GetVariableGeneric(TelegramFunctionBlueprint):
     # Abstract function that needs to be implemented
 
     def get_from_source(self, event: TelegramEvent):
-        """ virtual function to implement """
-        return None
+        raise NotImplemented
 
 
 class GetText(GetVariableGeneric):
