@@ -6,6 +6,7 @@ from telegram.ext import CallbackContext, CallbackQueryHandler, Handler
 from MateWrapper.generics import TelegramFunctionBlueprint
 from MateWrapper.prompts import Prompt
 
+
 DEFAULT_BACK_BUTTON = InlineKeyboardButton(text="\U00002B05 Back", callback_data="__back__")
 
 
@@ -60,9 +61,30 @@ def generate_keyboard(
     """
     Generates a keyboard from a list of dictionaries or lists of dictionaries
 
-    :param input_list: the input list to transform into a keyboard
-    :param add_back_button: if true automatically adds a back button
-    :param custom_back_text: if set changes the back button's text
+    :param input_list:
+        the input list to transform into a keyboard.
+        It should look something like this:
+        [
+            {
+                "text": "button on a single line",
+                "url": "https://github.com/SudoOmbro"
+            },
+            [
+                {
+                    "text": "left button",
+                    "data": "callback1"
+                },
+                {
+                    "text": "right button",
+                    "data": "callback2"
+                }
+            ],
+            ...
+        ]
+    :param add_back_button:
+        if true automatically adds a back button
+    :param custom_back_text:
+        if set changes the back button's text
     """
     if (not input_list) and (not add_back_button):
         raise ValueError("The given list is empty or None!")
@@ -92,7 +114,7 @@ def generate_keyboard_from_list(
         custom_back_text: str or None = None,
 ) -> InlineKeyboardMarkup:
     """
-    Generates a keyboard from a list of objects.
+    Generates a keyboard from a list of objects (that can be stringified).
 
     :param input_list: the list you wish to transform into a keyboard
     :param add_back_button: if true automatically adds a back button
@@ -110,9 +132,19 @@ def MenuHandler(
     """
     generate a menu handler for all the buttons
 
-    :param ph_map: the param-handler map
-    :param extra_handlers: the extra handler to attach to the menu (like text or photo handler for example)
-    :param previous_menu: if set automatically handles the "__back__" pattern to go to the given menu
+    :param ph_map:
+        the pattern-handler map,
+        it should loom something like this:
+
+        {
+            "pattern1": callback1,
+            "pattern2": callback2,
+            ...
+        }
+    :param extra_handlers:
+        the extra handler to attach to the menu (like text or photo handler for example)
+    :param previous_menu:
+        if set automatically handles the "__back__" pattern to go to the given menu
     """
     if not ph_map:
         raise ValueError("No handler was passed!")
