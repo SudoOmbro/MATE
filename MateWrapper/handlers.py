@@ -1,3 +1,5 @@
+from typing import Dict
+
 from telegram.ext import CallbackQueryHandler, MessageHandler, Filters, ConversationHandler
 
 from MateWrapper.generics import TelegramFunctionBlueprint
@@ -6,7 +8,7 @@ from MateWrapper.generics import TelegramFunctionBlueprint
 END_CONVERSATION = ConversationHandler.END
 
 
-class KeyboardHandler(CallbackQueryHandler):
+class ButtonHandler(CallbackQueryHandler):
     pass
 
 

@@ -6,7 +6,7 @@ from MateWrapper.generics import TelegramUserError
 
 logging.basicConfig(
     level=logging.ERROR,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 
 log = logging.getLogger()

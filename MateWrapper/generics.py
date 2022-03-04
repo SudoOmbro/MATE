@@ -1,5 +1,3 @@
-from typing import Tuple
-
 from telegram import Update
 from telegram.ext import CallbackContext
 
@@ -32,35 +30,6 @@ class TelegramFunctionBlueprint:
 
     def logic(self, event: TelegramEvent):
         raise NotImplemented
-
-
-class Chain:
-
-    def __init__(self, *args: TelegramFunctionBlueprint or callable, return_value: bool = True):
-        """
-        Used to call multiple functions from a single handle, useful to avoid creating custom functions for most
-        interactions with the Bot.
-        Chains can be Nested in other chains to create subroutines.
-
-        :param args:
-            a tuple containing the functions that will be called,
-            starting from the first and finishing with the last,
-            returning the last non null value if return_value is True.
-        :param return_value:
-            if True returns the last returned non-None value, if False it doesn't return anything. By default it's true
-        """
-        self.functions: Tuple = args
-        self.return_value: bool = return_value
-        # TODO(?) add a Chain subclass used for authentication
-
-    def __call__(self, update: Update, context: CallbackContext):
-        last_return_value = None
-        for func in self.functions:
-            ret = func(update, context)
-            if ret is not None:
-                last_return_value = ret
-        if self.return_value:
-            return last_return_value
 
 
 class TelegramUserError(Exception):

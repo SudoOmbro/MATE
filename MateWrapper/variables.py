@@ -111,7 +111,8 @@ class GetText(GetVariableGeneric):
             transformation_function: callable or None = None,
             validation_regex: str = None,
             error_message: str = None,
-            return_value: int or None = None
+            return_value: int or None = None,
+            custom_setter_function: callable or None = None
     ):
         """
         gets a text input from the user and optionally validates it.
@@ -128,8 +129,15 @@ class GetText(GetVariableGeneric):
             Leave empty for a default, generic response
         :param return_value:
             see <TelegramGetVariableGeneric>
+        :param custom_setter_function:
+            see <TelegramGetVariableGeneric>
         """
-        super().__init__(var_name, transformation_function=transformation_function, return_value=return_value)
+        super().__init__(
+            var_name,
+            transformation_function=transformation_function,
+            return_value=return_value,
+            custom_setter_function=custom_setter_function
+        )
         if validation_regex:
             self.validation_regex = validation_regex
             self.get_from_source: callable = self.get_validation
@@ -150,7 +158,8 @@ class GetText(GetVariableGeneric):
 
 class GetKeyboardInput(GetVariableGeneric):
 
-    # TODO? (I have never used this but the base library supports it so maybe?) add support for arbitrary_callback_data
+    # TODO? add support for arbitrary_callback_data
+    # (I have never used this but the base library supports it so maybe?)
 
     def get_from_source(self, event: TelegramEvent):
         return event.update.callback_query.data
