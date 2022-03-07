@@ -14,7 +14,7 @@ class GetVariableGeneric(TelegramFunctionBlueprint):
             self,
             var_name: str or None,
             transformation_function: callable = None,
-            return_value: int or None = None,
+            next_state: int or None = None,
             custom_setter_function: callable or None = None
     ):
         """
@@ -39,7 +39,7 @@ class GetVariableGeneric(TelegramFunctionBlueprint):
 
             func(input, event: TelegramEvent):
                 return something
-        :param return_value:
+        :param next_state:
             the return value of the function, used to change state in conversation handlers.
             Leave at None to not change state.
         :param custom_setter_function:
@@ -69,7 +69,7 @@ class GetVariableGeneric(TelegramFunctionBlueprint):
                 self.set_handler: MATEVarSetter = MATEVarSetter(var_name)
         else:
             self.logic = self.__no_set
-        self.return_value = return_value
+        self.next_state = next_state
 
     # get handling
 
@@ -83,18 +83,18 @@ class GetVariableGeneric(TelegramFunctionBlueprint):
 
     def __set(self, event: TelegramEvent):
         self.set_handler.logic(event)
-        return self.return_value
+        return self.next_state
 
     def __custom_setter_handler(self, event: TelegramEvent):
         return_value = self.custom_setter_function(self.__get(event), self.var_name)
         if return_value:
             return return_value
-        return self.return_value
+        return self.next_state
 
     def __no_set(self, event: TelegramEvent):
-        if self.return_value:
+        if self.next_state:
             self.__get(event)
-            return self.return_value
+            return self.next_state
         return self.__get(event)
 
     # Abstract function that needs to be implemented
@@ -111,7 +111,7 @@ class GetText(GetVariableGeneric):
             transformation_function: callable or None = None,
             validation_regex: str = None,
             error_message: str = None,
-            return_value: int or None = None,
+            next_state: int or None = None,
             custom_setter_function: callable or None = None
     ):
         """
@@ -127,7 +127,7 @@ class GetText(GetVariableGeneric):
         :param error_message:
             The error message to send the user in case the given input wasn't validated correctly.
             Leave empty for a default, generic response
-        :param return_value:
+        :param next_state:
             see <TelegramGetVariableGeneric>
         :param custom_setter_function:
             see <TelegramGetVariableGeneric>
@@ -135,7 +135,7 @@ class GetText(GetVariableGeneric):
         super().__init__(
             var_name,
             transformation_function=transformation_function,
-            return_value=return_value,
+            next_state=next_state,
             custom_setter_function=custom_setter_function
         )
         if validation_regex:

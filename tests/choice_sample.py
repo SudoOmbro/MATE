@@ -3,13 +3,15 @@ import json
 from telegram.ext import CommandHandler
 
 from MateWrapper.bot import TelegramBot
+from MateWrapper.generics import Chain
 from MateWrapper.handlers import Conversation, END_CONVERSATION
+from MateWrapper.menus import MenuHandler
 from MateWrapper.prompts import Prompt
-from MateWrapper.utils import generate_keyboard, MenuHandler, Chain
+from MateWrapper.keyboards import get_keyboard
 
 MAIN_MENU_PROMPT = Prompt(
     "Hi! What do you want me to do?",
-    generate_keyboard([
+    get_keyboard([
             [
                 {
                     "text": "say hi to me!",
@@ -23,12 +25,12 @@ MAIN_MENU_PROMPT = Prompt(
         ],
         add_back_button=True
     ),
-    return_value=0,
+    next_state=0,
     delete_last_message=True
 )
 END_PROMPT = Prompt(
     "Conversation finished",
-    return_value=END_CONVERSATION,
+    next_state=END_CONVERSATION,
     delete_last_message=True
 )
 

@@ -1,41 +1,9 @@
-from typing import Tuple, List, Dict
+from typing import List, Dict
 
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import CallbackContext, CallbackQueryHandler, Handler
-
-from MateWrapper.generics import TelegramFunctionBlueprint
-from MateWrapper.prompts import Prompt
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 
 DEFAULT_BACK_BUTTON = InlineKeyboardButton(text="\U00002B05 Back", callback_data="__back__")
-
-
-class Chain:
-
-    def __init__(self, *args: TelegramFunctionBlueprint or callable, return_value: bool = True):
-        """
-        Used to call multiple functions from a single handle, useful to avoid creating custom functions for most
-        interactions with the Bot.
-        Chains can be Nested in other chains to create subroutines.
-
-        :param args:
-            a tuple containing the functions that will be called,
-            starting from the first and finishing with the last,
-            returning the last non null value if return_value is True.
-        :param return_value:
-            if True returns the last returned non-None value, if False it doesn't return anything. By default it's true
-        """
-        self.functions: Tuple = args
-        self.return_value: bool = return_value
-
-    def __call__(self, update: Update, context: CallbackContext):
-        last_return_value = None
-        for func in self.functions:
-            ret = func(update, context)
-            if ret is not None:
-                last_return_value = ret
-        if self.return_value:
-            return last_return_value
 
 
 def __is_button_valid(dictionary: Dict[str, str]):
@@ -53,7 +21,7 @@ def __get_button(dictionary: Dict[str, str]):
     return InlineKeyboardButton(text=text, url=url)
 
 
-def generate_keyboard(
+def get_keyboard(
         input_list: List[Dict[str, str] or List[Dict[str, str]]],
         add_back_button: bool = False,
         custom_back_text: str or None = None
@@ -108,7 +76,7 @@ def generate_keyboard(
     return InlineKeyboardMarkup(keyboard_list)
 
 
-def generate_keyboard_from_list(
+def get_keyboard_from_list(
         input_list: List,
         add_back_button: bool = False,
         custom_back_text: str or None = None,
@@ -122,37 +90,3 @@ def generate_keyboard_from_list(
     """
     new_list = [{"text": str(element), "data": str(element)} for element in input_list]
     return generate_keyboard(new_list, add_back_button=add_back_button, custom_back_text=custom_back_text)
-
-
-def MenuHandler(
-        ph_map: Dict[str, TelegramFunctionBlueprint or Chain or callable],
-        extra_handlers: List[Handler] or None = None,
-        previous_menu: Prompt or None = None,
-) -> List[Handler]:
-    """
-    generate a menu handler for all the buttons
-
-    :param ph_map:
-        the pattern-handler map,
-        it should loom something like this:
-
-        {
-            "pattern1": callback1,
-            "pattern2": callback2,
-            ...
-        }
-    :param extra_handlers:
-        the extra handler to attach to the menu (like text or photo handler for example)
-    :param previous_menu:
-        if set automatically handles the "__back__" pattern to go to the given menu
-    """
-    if not ph_map:
-        raise ValueError("No handler was passed!")
-    handlers: List[Handler] = []
-    for pattern in ph_map:
-        handlers.append(CallbackQueryHandler(ph_map[pattern], pattern=pattern))
-    if extra_handlers:
-        handlers.extend(extra_handlers)
-    if previous_menu is not None:
-        handlers.append(CallbackQueryHandler(previous_menu, pattern="__back__"))
-    return handlers
