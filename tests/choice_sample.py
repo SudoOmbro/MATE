@@ -5,7 +5,7 @@ from telegram.ext import CommandHandler
 from MateWrapper.bot import TelegramBot
 from MateWrapper.generics import Chain
 from MateWrapper.handlers import Conversation, END_CONVERSATION
-from MateWrapper.menus import MenuHandler
+from MateWrapper.menus import get_menu_handler
 from MateWrapper.prompts import Prompt
 from MateWrapper.keyboards import get_keyboard
 
@@ -42,7 +42,7 @@ def main():
     bot.add_handler(Conversation(
         entry_points=[CommandHandler("start", MAIN_MENU_PROMPT)],
         states={
-            0: MenuHandler(
+            0: get_menu_handler(
                 {
                     "hi": Chain(
                         Prompt("hi {__name}! Nice to meet you!"),

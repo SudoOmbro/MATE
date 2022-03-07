@@ -7,7 +7,7 @@ from MateWrapper.prompts import Prompt
 from MateWrapper.generics import Chain
 
 
-def MenuHandler(
+def get_menu_handler(
         ph_map: Dict[str, TelegramFunctionBlueprint or Chain or callable],
         extra_handlers: List[Handler] or None = None,
         previous_menu: Prompt or None = None,
