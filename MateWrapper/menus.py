@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from telegram.ext import Handler, CallbackQueryHandler
+from telegram.ext import Handler, CallbackQueryHandler, ConversationHandler
 
 from MateWrapper.generics import TelegramFunctionBlueprint
 from MateWrapper.prompts import Prompt
@@ -39,3 +39,8 @@ def get_menu_handler(
     if previous_menu is not None:
         handlers.append(CallbackQueryHandler(previous_menu, pattern="__back__"))
     return handlers
+
+
+def generate_conversation(entry_points: List[Handler], menu: dict, fallback: List[Handler]) -> ConversationHandler:
+    # TODO
+    pass

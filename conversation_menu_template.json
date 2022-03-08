@@ -1,0 +1,27 @@
+{
+  "menu 1 name": {
+    "prompt": "put prompt text here or function that generates the prompt",
+    "buttons": [
+      [
+        {
+          "text": "fo stuff",
+          "func": "put function or chain here (or None)"
+        },
+        {
+          "text": "check out this cool url",
+          "url": "https://github.com/SudoOmbro"
+        }
+      ]
+    ]
+  },
+  "menu 2 name": {
+    "prompt": "put prompt text here or function that generates the prompt",
+    "buttons": [
+      {
+        "text": "go to menu 1",
+        "func": "put function or chain here (or None)",
+        "goto": "menu 1 name"
+      }
+    ]
+  }
+}
