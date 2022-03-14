@@ -149,6 +149,7 @@ class Panel:
         self.prompt_text = prompt_text
         self.buttons = buttons
         self.back_to = back_to
+        self.extra_handlers = extra_handlers
 
     def keyboard(self) -> InlineKeyboardMarkup:
         """ returns a keyboard object that the base wrapper can use """
@@ -159,7 +160,7 @@ class Panel:
         return InlineKeyboardMarkup(keyboard_list)
 
 
-class Menu:
+class Menu(ConversationHandler):
     """
     A menu, container for one or more (usually more) panels
 
@@ -180,18 +181,12 @@ class Menu:
             entry_points: List[Handler],
             panels: Dict[str, Panel],
             main_panel: str,
-            fallbacks: List[Handler] or None = None,
+            fallbacks: List[Handler]
     ):
-        # noinspection PyTypeChecker
-        self.entry_points: List[Handler] = entry_points,
         self.submenus = panels
-        self.fallbacks = fallbacks
         self.main_panel = main_panel
+        super().__init__(entry_points, self.__compile(panels, main_panel), fallbacks)
 
-    def handler(self) -> ConversationHandler:
-        """ returns a ConversationHandler that the base wrapper can use """
-        return ConversationHandler(
-            entry_points=self.entry_points,
-            states={},  # TODO
-            fallbacks=self.fallbacks
-        )
+    def __compile(self, panels: Dict[str, Panel], main_panel: str) -> Dict[int, List[Handler]]:
+        # TODO compile panels into states with handlers
+        pass
