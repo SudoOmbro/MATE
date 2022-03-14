@@ -35,20 +35,24 @@ class TelegramFunctionBlueprint:
 
 
 class Chain:
+    """
+    Used to call multiple functions from a single handle, useful to avoid creating custom functions for most
+    interactions with the Bot.
+    Chains can be Nested in other chains to create subroutines
 
-    def __init__(self, *args: TelegramFunctionBlueprint or callable, next_state: bool = True):
-        """
-        Used to call multiple functions from a single handle, useful to avoid creating custom functions for most
-        interactions with the Bot.
-        Chains can be Nested in other chains to create subroutines.
+    Parameters:
 
-        :param args:
-            a tuple containing the functions that will be called,
-            starting from the first and finishing with the last,
-            returning the last non null value if return_value is True.
-        :param next_state:
-            if True returns the last returned non-None value, if False it doesn't return anything. By default it's true
-        """
+    args (Tuple[callable]):
+        a tuple containing the functions that will be called,
+        starting from the first and finishing with the last,
+        returning the last non-None value if return_value is not defined.
+    next_state (int or None):
+        if defined then the chain will return the given value,
+        if not it will return the last non-None value.
+        By default, it's not defined, the last non-None value is returned.
+    """
+
+    def __init__(self, *args: TelegramFunctionBlueprint or callable, next_state: int or None = None):
         self.functions: Tuple = args
         self.next_state: bool = next_state
 
@@ -59,7 +63,8 @@ class Chain:
             if ret is not None:
                 last_return_value = ret
         if self.next_state:
-            return last_return_value
+            return self.next_state
+        return last_return_value
 
 
 class TelegramUserError(Exception):

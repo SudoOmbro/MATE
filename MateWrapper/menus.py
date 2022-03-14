@@ -15,7 +15,7 @@ def _get_button_handle() -> str:
     global __BUTTON_COUNTER
     current_id = __BUTTON_COUNTER
     __BUTTON_COUNTER += 1
-    return f"__b{current_id}"
+    return f"__b{current_id}__"
 
 
 def get_menu_handler(
@@ -53,6 +53,7 @@ def get_menu_handler(
 
 
 class Button:
+    """ generic keyboard button class to implement """
 
     def __init__(self, text: str):
         if not text:
@@ -60,18 +61,26 @@ class Button:
         self.text: str = text
         self.handle: str = _get_button_handle()
 
-    def setup(self, parent_menu: "Menu", parent_submenu: "Panel"):
+    def setup(self, parent_menu: "Menu", parent_panel: "Panel", last_state: int):
         # implement if the button needs the menu's context to initialize itself
-        pass
+        return last_state
 
     def callback_handler(self) -> callable or None:
         return None
 
     def keyboard_button(self) -> InlineKeyboardButton:
-        raise NotImplemented()
+        """ by default generates the button with its handle as callback data """
+        return InlineKeyboardButton(self.text, callback_data=self.handle)
+
+
+class GotoButton(Button):
+    """ button that allows for Panel changing """
+    # TODO
+    pass
 
 
 class UrlButton(Button):
+    """ button that redirects the user to the specified url when clicked """
 
     def __init__(self, text: str, url: str):
         super().__init__(text)
@@ -84,6 +93,7 @@ class UrlButton(Button):
 
 
 class FuncButton(Button):
+    """ button that executes a function when clicked """
 
     def __init__(self, text: str, function: callable):
         super().__init__(text)
@@ -91,39 +101,95 @@ class FuncButton(Button):
             raise ValueError("The function cannot be None")
         self.func = function
 
-    def keyboard_button(self) -> InlineKeyboardButton:
-        return InlineKeyboardButton(self.text, callback_data=self.handle)
-
     def callback_handler(self) -> callable or None:
         return self.func
 
 
-class Panel:
+class InputButton(FuncButton):
+    """ button that makes getting inputs from users a lot easier by automating callback and state handling """
 
-    def __init__(self, prompt: Prompt, buttons: List[Button or List[Button]], back_to: str):
-        self.prompt = prompt
+    def __init__(self, text: str, prompt: Prompt, function: callable):
+        super().__init__(text, function)
+        self.prompt: Prompt = prompt
+        self.new_state: int = 0
+
+    def setup(self, parent_menu: "Menu", parent_panel: "Panel", current_state: int):
+        self.new_state: int = current_state + 1
+        self.func = Chain(self.func, next_state=current_state)
+        return self.new_state
+
+    def callback_handler(self) -> callable or None:
+        return Chain(self.prompt, next_state=self.new_state)
+
+
+class Panel:
+    """
+    A menu view, basically a prompt with a keyboard (if needed)
+
+    Parameters:
+
+    prompt_text (str):
+        The text that will be sent when this panel is shown,
+        supports all the same formatting options as the Panel object.
+    buttons (List[Button or List[Button]]):
+        The list of Button objects (or of List[Button]) that will define the functionality of this panel.
+    back_to (str):
+        The name of the Panel to go back to. If "__end__" the back button will close the menu.
+    extra_handlers (List[callable]):
+        A list of extra handlers that can do extra stuff, like read text inputs and stuff like that.
+    """
+
+    def __init__(
+            self,
+            prompt_text: str,
+            buttons: List[Button or List[Button]],
+            back_to: str,
+            extra_handlers: List[callable]
+    ):
+        self.prompt_text = prompt_text
         self.buttons = buttons
         self.back_to = back_to
 
     def keyboard(self) -> InlineKeyboardMarkup:
+        """ returns a keyboard object that the base wrapper can use """
         keyboard_list: List[List[InlineKeyboardButton]] = []
-        # TODO
+        for button in self.buttons:
+            # TODO
+            pass
         return InlineKeyboardMarkup(keyboard_list)
 
 
 class Menu:
+    """
+    A menu, container for one or more (usually more) panels
+
+    Parameters:
+
+    entry_points (List[Handler]):
+        The list of handlers that will activate this menu from the "main" state.
+    panels (Dict[str, Panel]):
+        A dictionary containing the name-panel pair.
+    main_panel (str):
+        Defines which panel to show when first entering the menu
+    fallbacks (List[Handler]):
+        A list of extra handlers valid in the entire menu, useful for example for commands.
+    """
 
     def __init__(
             self,
             entry_points: List[Handler],
-            submenus: Dict[str, Panel],
-            fallbacks: List[Handler] or None = None
+            panels: Dict[str, Panel],
+            main_panel: str,
+            fallbacks: List[Handler] or None = None,
     ):
-        self.entry_points = entry_points,
-        self.submenus = submenus
+        # noinspection PyTypeChecker
+        self.entry_points: List[Handler] = entry_points,
+        self.submenus = panels
         self.fallbacks = fallbacks
+        self.main_panel = main_panel
 
-    def get_conversation(self) -> ConversationHandler:
+    def handler(self) -> ConversationHandler:
+        """ returns a ConversationHandler that the base wrapper can use """
         return ConversationHandler(
             entry_points=self.entry_points,
             states={},  # TODO
