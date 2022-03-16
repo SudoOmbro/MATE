@@ -88,4 +88,4 @@ def get_keyboard_from_list(
     :param custom_back_text: if set changes the back button's text
     """
     new_list = [{"text": str(element), "data": str(element)} for element in input_list]
-    return generate_keyboard(new_list, add_back_button=add_back_button, custom_back_text=custom_back_text)
+    return get_keyboard(new_list, add_back_button=add_back_button, custom_back_text=custom_back_text)
