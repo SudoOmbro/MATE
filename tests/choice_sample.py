@@ -3,62 +3,45 @@ import json
 from telegram.ext import CommandHandler
 
 from MateWrapper.bot import TelegramBot
-from MateWrapper.generics import Chain
-from MateWrapper.handlers import Conversation, END_CONVERSATION
-from MateWrapper.menus import get_menu_handler
+from MateWrapper.globals import Globals
+from MateWrapper.menus import Menu, Panel, FuncButton, InputButton
 from MateWrapper.prompts import Prompt
-from MateWrapper.keyboards import get_keyboard
-
-MAIN_MENU_PROMPT = Prompt(
-    "Hi! What do you want me to do?",
-    get_keyboard([
-            [
-                {
-                    "text": "say hi to me!",
-                    "data": "hi"
-                },
-                {
-                    "text": "tell me my id!",
-                    "data": "id"
-                }
-            ]
-        ],
-        add_back_button=True
-    ),
-    next_state=0,
-    delete_last_message=True
-)
-END_PROMPT = Prompt(
-    "Conversation finished",
-    next_state=END_CONVERSATION,
-    delete_last_message=True
-)
+from MateWrapper.handlers import TextHandler
+from MateWrapper.variables import GetText
 
 
 def main():
     with open("config.json", "r") as file:
         config_json = json.load(file)
     bot = TelegramBot(config_json["token"], name="test")
-    bot.add_handler(Conversation(
-        entry_points=[CommandHandler("start", MAIN_MENU_PROMPT)],
-        states={
-            0: get_menu_handler(
-                {
-                    "hi": Chain(
-                        Prompt("hi {__name}! Nice to meet you!"),
-                        MAIN_MENU_PROMPT
+    bot.add_handler(Menu(
+        entry_points=[CommandHandler("start", Globals.ENTRY_POINT)],
+        panels={
+            "main": Panel(
+                "Hi there {__name}, what do you want to do?",
+                [
+                    [
+                        FuncButton(
+                            "show ID",
+                            Prompt("Your id is `{__id}`")
+                        ),
+                        InputButton(
+                            "Echo",
+                            Prompt("okay, send some text", delete_last_message=True, keyboard=Globals.BACK_KEYBOARD),
+                            TextHandler(GetText("text"))
+                        )
+                    ],
+                    FuncButton(
+                        "What did i say?",
+                        Prompt("You said: '{text}'")
                     ),
-                    "id": Chain(
-                        Prompt("Your id is {__id}"),
-                        MAIN_MENU_PROMPT
-                    )
-                },
-                previous_menu=END_PROMPT
+                ],
+                back_to=Globals.END_PATTERN,
             )
         },
-        fallbacks=[CommandHandler("end", END_PROMPT)]
+        main_panel="main",
+        fallbacks=[CommandHandler("end", Globals.END_HANDLER)]
     ))
-    bot.add_handler(CommandHandler("about", Prompt("This bot was made by @LordOmbro")))
     bot.start_and_idle()
 
 

@@ -82,7 +82,7 @@ class GetVariableGeneric(TelegramFunctionBlueprint):
     # set handling
 
     def __set(self, event: TelegramEvent):
-        self.set_handler.logic(event)
+        self.set_handler.logic(self.set_handler, self.__get(event), event)
         return self.next_state
 
     def __custom_setter_handler(self, event: TelegramEvent):
@@ -111,7 +111,7 @@ class GetText(GetVariableGeneric):
             transformation_function: callable or None = None,
             validation_regex: str = None,
             error_message: str = None,
-            next_state: int or None = None,
+            next_state: object or None = None,
             custom_setter_function: callable or None = None
     ):
         """

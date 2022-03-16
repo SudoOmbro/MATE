@@ -2,8 +2,7 @@ from typing import List, Dict
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-
-DEFAULT_BACK_BUTTON = InlineKeyboardButton(text="\U00002B05 Back", callback_data="__back__")
+from MateWrapper.globals import Globals
 
 
 def __is_button_valid(dictionary: Dict[str, str]):
@@ -71,7 +70,7 @@ def get_keyboard(
         if custom_back_text:
             back_button = InlineKeyboardButton(text=custom_back_text, callback_data="__back__")
         else:
-            back_button = DEFAULT_BACK_BUTTON
+            back_button = Globals.BACK_BUTTON
         keyboard_list.append([back_button])
     return InlineKeyboardMarkup(keyboard_list)
 

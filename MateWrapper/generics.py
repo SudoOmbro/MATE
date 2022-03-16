@@ -52,7 +52,7 @@ class Chain:
         By default, it's not defined, the last non-None value is returned.
     """
 
-    def __init__(self, *args: TelegramFunctionBlueprint or callable, next_state: int or None = None):
+    def __init__(self, *args: TelegramFunctionBlueprint or callable, next_state: object or None = None):
         self.functions: Tuple = args
         self.next_state: bool = next_state
 
