@@ -213,7 +213,7 @@ class Panel:
                     self._add_button_handler(context, result, button)
             else:
                 self._add_button_handler(context, result, element)
-        if self.back_to == Globals.END_PATTERN:
+        if self.back_to == Globals.CLOSE_MENU:
             result.append(Globals.END_HANDLER)
         else:
             result.append(get_back_button_handler(context.panels[self.back_to]))

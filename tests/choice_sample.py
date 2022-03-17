@@ -36,7 +36,7 @@ def main():
                         Prompt("You said: '{text}'")
                     ),
                 ],
-                back_to=Globals.END_PATTERN,
+                back_to=Globals.CLOSE_MENU,
             )
         },
         main_panel="main",

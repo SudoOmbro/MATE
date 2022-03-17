@@ -8,10 +8,6 @@ from MateWrapper.generics import TelegramFunctionBlueprint
 END_CONVERSATION = ConversationHandler.END
 
 
-class Conversation(ConversationHandler):
-    pass
-
-
 class ButtonHandler(CallbackQueryHandler):
     pass
 

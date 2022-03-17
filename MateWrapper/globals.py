@@ -8,7 +8,7 @@ class Globals:
 
     # Patterns
     BACK_PATTERN = "__back__"
-    END_PATTERN = "__end__"
+    CLOSE_MENU = "__end__"
 
     # Buttons
     BACK_BUTTON = InlineKeyboardButton(text="\U00002B05 Back", callback_data=BACK_PATTERN)
