@@ -9,6 +9,7 @@ from MateWrapper.generics import TelegramFunctionBlueprint, TelegramEvent, Teleg
 
 
 class GetVariableGeneric(TelegramFunctionBlueprint):
+    """ Generic class to handle variables in the wrapper, needs to be implemented """
 
     def __init__(
             self,
@@ -18,8 +19,6 @@ class GetVariableGeneric(TelegramFunctionBlueprint):
             custom_setter_function: callable or None = None
     ):
         """
-        Generic class to handle variables in the wrapper
-
         :param var_name:
             name of the variable to store, this will be put in context.chat_data
 
@@ -104,6 +103,7 @@ class GetVariableGeneric(TelegramFunctionBlueprint):
 
 
 class GetText(GetVariableGeneric):
+    """ Gets a text input from the user and optionally validates it. """
 
     def __init__(
             self,
@@ -115,22 +115,20 @@ class GetText(GetVariableGeneric):
             custom_setter_function: callable or None = None
     ):
         """
-        gets a text input from the user and optionally validates it.
-
-        :param var_name:
-            see <TelegramGetVariableGeneric>
-        :param transformation_function:
-            see <TelegramGetVariableGeneric>
-        :param validation_regex:
+        :param str or None var_name:
+            see GetVariableGeneric
+        :param callable or None transformation_function:
+            see GetVariableGeneric
+        :param str validation_regex:
             The regular expression used to validate the text input.
             Leave empty if you don't want to validate
-        :param error_message:
+        :param str error_message:
             The error message to send the user in case the given input wasn't validated correctly.
             Leave empty for a default, generic response
-        :param next_state:
-            see <TelegramGetVariableGeneric>
-        :param custom_setter_function:
-            see <TelegramGetVariableGeneric>
+        :param object or None next_state:
+            see GetVariableGeneric
+        :param callable or None custom_setter_function:
+            see GetVariableGeneric
         """
         super().__init__(
             var_name,

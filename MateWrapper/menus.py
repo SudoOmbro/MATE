@@ -20,6 +20,7 @@ def _get_button_handle() -> str:
 
 
 class _MenuContext:
+    """ Private class used by Menus to compile buttons and panels """
 
     def __init__(self, current_menu: "Menu", current_panel: "Panel", panels: Dict[object, "Panel"]):
         self.current_menu = current_menu
@@ -69,6 +70,9 @@ class GotoButton(Button):
             raise ValueError(f"panel '{self.next_panel}' is not defined")
         self.handler = CallbackQueryHandler(context.panels[self.next_panel].prompt, pattern=self.handle)
 
+    def get_handler(self) -> Handler or None:
+        return self.handler
+
 
 class UrlButton(Button):
     """ button that redirects the user to the specified url when clicked """
@@ -98,21 +102,20 @@ class FuncButton(Button):
 
 class InputButton(Button):
     """
-    button that makes getting inputs from users a lot easier by automating callback and state handling
-
-    Parameters:
-
-    text (str):
-        The text that will be shown in the button
-    prompt (Prompt):
-        The prompt that will be shown when acquiring the input from the user
-    input_handle (Handler or List[Handler]):
-        The function(s) that will be used to handle the user's input
+    button that makes getting inputs from users a lot easier by automating callback and state handling.
     """
 
     current_panel: "Panel"
 
     def __init__(self, text: str, prompt: Prompt, input_handlers: Handler or List[Handler]):
+        """
+        :param text (str):
+            The text that will be shown in the button
+        :param prompt (Prompt):
+            The prompt that will be shown when acquiring the input from the user
+        :param input_handle (Handler or List[Handler]):
+            The function(s) that will be used to handle the user's input
+        """
         super().__init__(text)
         self.prompt: Prompt = prompt
         if not input_handlers:
@@ -143,19 +146,6 @@ class InputButton(Button):
 class Panel:
     """
     A menu view, basically a prompt with a keyboard (if needed)
-
-    Parameters:
-
-    prompt_text (str):
-        The text that will be sent when this panel is shown,
-        supports all the same formatting options as the Panel object.
-        Can be callable.
-    buttons (List[Button or List[Button]]):
-        The list of Button objects (or of List[Button]) that will define the functionality of this panel.
-    back_to (str):
-        The name of the Panel to go back to. If "__end__" the back button will close the menu.
-    extra_handlers (List[callable]):
-        A list of extra handlers that can do extra stuff, like read text inputs and stuff like that.
     """
 
     prompt: Prompt
@@ -167,6 +157,18 @@ class Panel:
             back_to: str,
             extra_handlers: List[Handler] or None = None
     ):
+        """
+        :param prompt_text:
+            The text that will be sent when this panel is shown,
+            supports all the same formatting options as the Panel object.
+            Can be callable.
+        :param buttons:
+            The list of Button objects (or of List[Button]) that will define the functionality of this panel.
+        :param back_to:
+            The name of the Panel to go back to. If "__end__" the back button will close the menu.
+        :param extra_handlers:
+            A list of extra handlers that can do extra stuff, like read text inputs and stuff like that.
+        """
         self.buttons = buttons
         self.prompt_text = prompt_text
         self.back_to = back_to
@@ -223,18 +225,6 @@ class Panel:
 class Menu(ConversationHandler):
     """
     A menu, container for one or more (usually more) panels
-
-    Parameters:
-
-    entry_points (List[Handler]):
-        The list of handlers that will activate this menu from the "main" state.
-
-    panels (Dict[str, Panel]):
-        A dictionary containing the name-panel pair.
-    main_panel (str):
-        Defines which panel to show when first entering the menu
-    fallbacks (List[Handler]):
-        A list of extra handlers valid in the entire menu, useful for example for commands.
     """
 
     def __init__(
@@ -244,6 +234,16 @@ class Menu(ConversationHandler):
             main_panel: object,
             fallbacks: List[Handler]
     ):
+        """
+        :param entry_points:
+            The list of handlers that will activate this menu from the "main" state.
+        :param panels:
+            A dictionary containing the name-panel pair.
+        :param main_panel:
+            Defines which panel to show when first entering the menu
+        :param fallbacks:
+            A list of extra handlers valid in the entire menu, useful for example for commands.
+        """
         super().__init__(
             entry_points,
             {},

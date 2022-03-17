@@ -15,20 +15,7 @@ from MateWrapper.generics import TelegramEvent
 
 
 class MATEVarHandler:
-    """
-    :param target:
-        the target variable to set/get. Special characters can change it's behaviour:
-        - target = "name":
-            simply set/retrieve the value of context.chat_data["name"]
-        - target = "dictionary:value"
-            set/retrieve the value of context.chat_data["dictionary"]["value"],
-            where context.chat_data["dictionary"] is a dictionary
-        - target = "object.variable":
-            set/retrieve the value of context.chat_data["object"].variable,
-            where context.chat_data["object"] is an object
-        - target = "_parameter":
-            retrieve the value "parameter" from update.effective_user (like "id" or "name")
-    """
+    """ Handles access to value either in the update or the context """
 
     HANDLERS: Dict[int, Tuple[callable, callable or None]]
 
@@ -36,6 +23,20 @@ class MATEVarHandler:
     # type - handler, lambda to get the args or None
 
     def __init__(self, target: str):
+        """
+        :param target:
+            the target variable to set/get. Special characters can change it's behaviour:
+            - target = "name":
+                simply set/retrieve the value of context.chat_data["name"]
+            - target = "dictionary:value"
+                set/retrieve the value of context.chat_data["dictionary"]["value"],
+                where context.chat_data["dictionary"] is a dictionary
+            - target = "object.variable":
+                set/retrieve the value of context.chat_data["object"].variable,
+                where context.chat_data["object"] is an object
+            - target = "_parameter":
+                retrieve the value "parameter" from update.effective_user (like "id" or "name")
+        """
         var_type = self.__get_access_type(target)
         # Get the correct handler from the inferred variable type. If there is no handler throw an Exception
         handlers: Tuple[callable, callable] = self.HANDLERS.get(var_type, None)
