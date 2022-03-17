@@ -54,7 +54,7 @@ class Chain:
 
     def __init__(self, *args: TelegramFunctionBlueprint or callable, next_state: object or None = None):
         self.functions: Tuple = args
-        self.next_state: bool = next_state
+        self.next_state: object or None = next_state
 
     def __call__(self, update: Update, context: CallbackContext):
         last_return_value = None

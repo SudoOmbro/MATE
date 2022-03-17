@@ -143,19 +143,29 @@ class InputButton(Button):
         return CallbackQueryHandler(Chain(self.prompt, next_state=self.handle), pattern=self.handle)
 
 
-class Panel:
-    """
-    A menu view, basically a prompt with a keyboard (if needed)
-    """
+class GenericPanel:
+    """ Panel prototype """
 
     prompt: Prompt
+
+    def set_prompt(self, current_state: object):
+        raise NotImplemented
+
+    def get_handlers(self, context: _MenuContext) -> List[Handler]:
+        raise NotImplemented
+
+
+class Panel(GenericPanel):
+    """
+    A complex implementation of a Panel that automatically handles callbacks & states
+    """
 
     def __init__(
             self,
             prompt_text: str or callable,
             buttons: List[Button or List[Button]],
             back_to: str,
-            extra_handlers: List[Handler] or None = None
+            extra_handlers: List[Handler] or None = None,
     ):
         """
         :param prompt_text:
@@ -222,6 +232,22 @@ class Panel:
         return result
 
 
+class CustomPanel(GenericPanel):
+    """ An extremely simple implementation of a Panel, useful for building very dynamic apps """
+
+    def __init__(self, prompt: Prompt, handlers: List[Handler], auto_handle_state: bool = True):
+        self.prompt = prompt
+        self.handlers = handlers
+        self.auto_handle_state = auto_handle_state
+
+    def set_prompt(self, current_state: object):
+        if self.auto_handle_state:
+            self.prompt.next_state = current_state
+
+    def get_handlers(self, context: _MenuContext) -> List[Handler]:
+        return self.handlers
+
+
 class Menu(ConversationHandler):
     """
     A menu, container for one or more (usually more) panels
@@ -230,7 +256,7 @@ class Menu(ConversationHandler):
     def __init__(
             self,
             entry_points: List[Handler],
-            panels: Dict[object, Panel],
+            panels: Dict[object, GenericPanel],
             main_panel: object,
             fallbacks: List[Handler]
     ):
@@ -253,7 +279,11 @@ class Menu(ConversationHandler):
         if main_panel not in panels:
             raise ValueError(f"The specified main panel '{main_panel}' isn't defined")
         for handler in entry_points:
-            handler.callback = panels[main_panel].prompt
+            if type(handler) == Chain:
+                if Globals.ENTRY_POINT in handler.callback.functions:
+                    handler.callback = Chain(handler.callback, panels[main_panel].prompt)
+            elif handler.callback == Globals.ENTRY_POINT:
+                handler.callback = panels[main_panel].prompt
 
     def __compile(self, panels: Dict[object, Panel]) -> Dict[int, List[Handler]]:
         result: Dict[int, List[Handler]] = {}

@@ -68,7 +68,7 @@ def get_keyboard(
                 keyboard_list.append([__get_button(element)])
     if add_back_button:
         if custom_back_text:
-            back_button = InlineKeyboardButton(text=custom_back_text, callback_data="__back__")
+            back_button = InlineKeyboardButton(text=custom_back_text, callback_data=Globals.BACK_PATTERN)
         else:
             back_button = Globals.BACK_BUTTON
         keyboard_list.append([back_button])

@@ -42,6 +42,12 @@ def main():
         main_panel="main",
         fallbacks=[CommandHandler("end", Globals.END_HANDLER)]
     ))
+    bot.add_handler(
+        CommandHandler("about", Prompt(
+            "Bot made by [SudoOmbro](https://github.com/SudoOmbro)",
+            use_markdown=True)
+        )
+    )
     bot.start_and_idle()
 
 
