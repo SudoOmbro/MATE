@@ -1,8 +1,8 @@
 from functools import cache
 from typing import Dict, List
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Handler, CallbackQueryHandler, ConversationHandler
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.ext import Handler, CallbackQueryHandler, ConversationHandler, CallbackContext
 
 from MateWrapper.globals import Globals
 from MateWrapper.prompts import Prompt
@@ -22,7 +22,7 @@ def _get_button_handle() -> str:
 class _MenuContext:
     """ Private class used by Menus to compile buttons and panels """
 
-    def __init__(self, current_menu: "Menu", current_panel: "Panel", panels: Dict[object, "Panel"]):
+    def __init__(self, current_menu: "Menu", current_panel: "GenericPanel", panels: Dict[object, "GenericPanel"]):
         self.current_menu = current_menu
         self.current_panel = current_panel
         self.panels = panels
@@ -196,12 +196,13 @@ class Panel(GenericPanel):
         return InlineKeyboardMarkup(keyboard_list)
 
     def set_prompt(self, current_state: object):
-        """ call this before compiling handlers """
+        """ Generates the Prompt, call this before compiling handlers """
         self.prompt = Prompt(
             self.prompt_text,
             self._get_keyboard(),
             next_state=current_state,
-            delete_last_message=True
+            delete_last_message=True,
+            use_markdown=True
         )
 
     @staticmethod
@@ -217,19 +218,40 @@ class Panel(GenericPanel):
     def get_handlers(self, context: _MenuContext) -> List[Handler]:
         """ returns a dictionary used to extend the main menu dictionary """
         result: List[Handler] = []
+        # compile all button handlers and add them
         for element in self.buttons:
             if type(element) == list:
                 for button in element:
                     self._add_button_handler(context, result, button)
             else:
                 self._add_button_handler(context, result, element)
-        if self.back_to == Globals.CLOSE_MENU:
-            result.append(Globals.END_HANDLER)
-        else:
-            result.append(get_back_button_handler(context.panels[self.back_to]))
+        # add back button if back_to is defined
+        if self.back_to:
+            if self.back_to == Globals.CLOSE_MENU:
+                result.append(Globals.END_HANDLER)
+            else:
+                result.append(get_back_button_handler(context.panels[self.back_to]))
+        # add the extra handlers if there are any
         if self.extra_handlers:
             result.extend(self.extra_handlers)
         return result
+
+
+class GOTO:
+    """ Returns the assigned string, useful for Changing Panel in a custom Panel """
+
+    prompt: Prompt
+
+    def __call__(self, update: Update, context: CallbackContext):
+        return self.prompt(update, context)
+
+    def __init__(self, destination_panel: str):
+        self.destination_panel = destination_panel
+
+    def compile(self, context: _MenuContext):
+        if self.destination_panel not in context.panels:
+            raise ValueError(f"The specified panel '{self.destination_panel}' is not defined")
+        self.prompt = context.panels[self.destination_panel].prompt
 
 
 class CustomPanel(GenericPanel):
@@ -245,6 +267,13 @@ class CustomPanel(GenericPanel):
             self.prompt.next_state = current_state
 
     def get_handlers(self, context: _MenuContext) -> List[Handler]:
+        for handler in self.handlers:
+            if type(handler.callback) == Chain:
+                for func in handler.callback.functions:
+                    if hasattr(func, "compile"):
+                        func.compile(context)
+            elif hasattr(handler.callback, "compile"):
+                handler.callback.compile(context)
         return self.handlers
 
 
@@ -279,13 +308,13 @@ class Menu(ConversationHandler):
         if main_panel not in panels:
             raise ValueError(f"The specified main panel '{main_panel}' isn't defined")
         for handler in entry_points:
-            if type(handler) == Chain:
+            if type(handler.callback) == Chain:
                 if Globals.ENTRY_POINT in handler.callback.functions:
                     handler.callback = Chain(handler.callback, panels[main_panel].prompt)
             elif handler.callback == Globals.ENTRY_POINT:
                 handler.callback = panels[main_panel].prompt
 
-    def __compile(self, panels: Dict[object, Panel]) -> Dict[int, List[Handler]]:
+    def __compile(self, panels: Dict[object, GenericPanel]) -> Dict[int, List[Handler]]:
         result: Dict[int, List[Handler]] = {}
         # set panel prompts:
         for panel_name in panels:

@@ -94,35 +94,36 @@ class Prompt(TelegramFunctionBlueprint):
         self.delete_last_message = delete_last_message
         self.parse_mode = ParseMode.MARKDOWN_V2 if use_markdown else None
         self.web_preview = not use_web_preview
-        if type(text) == callable:
+        if callable(text):
             if format_text is None:
-                if type(keyboard) == callable:
+                if callable(keyboard):
                     self.behaviour = self._call_and_call_autoformat
                 else:
                     self.behaviour = self._call_and_send_autoformat
             else:
                 if format_text:
-                    if type(keyboard) == callable:
+                    if callable(keyboard):
                         self.behaviour = self._call_and_call_format
                     else:
                         self.behaviour = self._call_and_send_format
                 else:
-                    if type(keyboard) == callable:
+                    if callable(keyboard):
                         self.behaviour = self._call_and_call_noformat
                     else:
                         self.behaviour = self._call_and_send_noformat
         else:
             if _has_formatting(text):
                 self.variables = _get_variable_getters(text)
-                if type(keyboard) == callable:
+                if callable(keyboard):
                     self.behaviour = self._format_and_call
                 else:
                     self.behaviour = self._format_and_send
             else:
-                if type(keyboard) == callable:
+                if callable(keyboard):
                     self.behaviour = self._send_and_call
                 else:
                     self.behaviour = self._send_and_send
+        # print(self.behaviour.__name__, type(keyboard))
 
     def _format_and_call(self, text: str, keyboard_func: callable, event: TelegramEvent):
         event.context.bot.send_message(

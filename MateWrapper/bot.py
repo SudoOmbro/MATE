@@ -20,7 +20,7 @@ def default_error_handler(update, context: CallbackContext):
         context.bot.send_message(text=str(error), chat_id=update.effective_chat.id)
     else:
         # handle program error
-        log.error(f"{error}\ndue to update: {update.to_dict()}\n")
+        log.exception(f"{error}\ndue to update: {update.to_dict()}\n")
 
 
 class TelegramBot:

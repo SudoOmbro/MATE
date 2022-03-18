@@ -60,8 +60,7 @@ class Chain:
         last_return_value = None
         for func in self.functions:
             ret = func(update, context)
-            if ret is not None:
-                last_return_value = ret
+            last_return_value = ret if ret is not None else last_return_value
         if self.next_state:
             return self.next_state
         return last_return_value

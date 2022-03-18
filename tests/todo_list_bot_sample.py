@@ -1,12 +1,12 @@
 import json
 from typing import List
 
-from telegram import InlineKeyboardMarkup, InlineKeyboardButton, Update
+from telegram import InlineKeyboardMarkup, InlineKeyboardButton, Update, ParseMode
 from telegram.ext import CommandHandler, CallbackContext
 
 from MateWrapper.bot import TelegramBot
 from MateWrapper.globals import Globals
-from MateWrapper.menus import Menu, Panel, FuncButton, InputButton, CustomPanel
+from MateWrapper.menus import Menu, Panel, FuncButton, InputButton, CustomPanel, GOTO
 from MateWrapper.prompts import Prompt
 from MateWrapper.handlers import TextHandler, ButtonHandler
 from MateWrapper.variables import GetText, InitDefaultContext
@@ -26,7 +26,7 @@ class TODOEntry:
         self.text = text
 
     def __str__(self):
-        return f"*{self.title}\n\n{self.text}*"
+        return f"*{self.title}*\n\n_{self.text}_"
 
 
 class EntryList:
@@ -34,7 +34,7 @@ class EntryList:
     def __init__(self):
         self.entry_list: List[TODOEntry] = []
 
-    def get_entry(self, entry_id: int):
+    def get_entry(self, entry_id: int) -> TODOEntry or None:
         for entry in self.entry_list:
             if entry.id == entry_id:
                 return entry
@@ -43,6 +43,11 @@ class EntryList:
     def delete_entry(self, entry_id: int):
         entry = self.get_entry(entry_id)
         self.entry_list.remove(entry)
+
+    def add_entry(self) -> TODOEntry:
+        new_entry = TODOEntry("new entry", "text")
+        self.entry_list.append(new_entry)
+        return new_entry
 
     def get_keyboard(self) -> InlineKeyboardMarkup:
         keyboard_list: List[List[InlineKeyboardButton]] = []
@@ -53,7 +58,7 @@ class EntryList:
                 InlineKeyboardButton("\U0001F5D1", callback_data=f"del {entry.id}")  # Trash emoji
             ])
         keyboard_list.append([InlineKeyboardButton("\U00002795", callback_data="add")])  # Plus emoji
-        keyboard_list.append(Globals.BACK_BUTTON)
+        keyboard_list.append([Globals.BACK_BUTTON])
         return InlineKeyboardMarkup(keyboard_list)
 
 
@@ -64,13 +69,29 @@ def get_id_from_query(update: Update) -> int:
 
 
 def show_todo(update: Update, context: CallbackContext):
+    # If you squint really hard, this could be a lambda
     chat_id = update.effective_chat.id
     entry_id = get_id_from_query(update)
-    context.bot.send_message(text=context.chat_data["list"].get_entry(entry_id), chat_id=chat_id)
+    context.bot.send_message(
+        text=str(context.chat_data["list"].get_entry(entry_id)),
+        chat_id=chat_id,
+        parse_mode=ParseMode.MARKDOWN_V2
+    )
+
+
+def edit_todo(update: Update, context: CallbackContext):
+    # This could be a lambda
+    context.chat_data["current_todo"] = context.chat_data["list"].get_entry(get_id_from_query(update))
 
 
 def delete_todo(update: Update, context: CallbackContext):
-    pass
+    # This could be a lambda too
+    context.chat_data["list"].delete_entry(get_id_from_query(update))
+
+
+def add_todo(update: Update, context: CallbackContext):
+    # Yup, this could be a lambda too
+    context.chat_data["current_todo"] = context.chat_data["list"].add_entry()
 
 
 # Bot
@@ -95,9 +116,10 @@ def main():
                 ),
                 [
                     ButtonHandler(show_todo, pattern="show [0-9]+"),
-                    ButtonHandler(Chain(), pattern="edit [0-9]+"),  # TODO add a GOTO instruction
-                    ButtonHandler(Chain(), pattern="del [0-9]+"),
-                    ButtonHandler(Chain(), pattern="add")
+                    ButtonHandler(Chain(edit_todo, GOTO("edit")), pattern="edit [0-9]+"),
+                    ButtonHandler(Chain(delete_todo, GOTO("main")), pattern="del [0-9]+"),
+                    ButtonHandler(Chain(add_todo, GOTO("edit")), pattern="add"),
+                    Globals.END_HANDLER
                 ]
             ),
             "edit": Panel(
