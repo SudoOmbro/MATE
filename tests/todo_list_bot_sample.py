@@ -97,6 +97,7 @@ def add_todo(update: Update, context: CallbackContext):
 # Bot
 
 def main():
+    """ Very simple app, does not save the context but that wouldn't be too hard to do """
     with open("config.json", "r") as file:
         config_json = json.load(file)
     bot = TelegramBot(config_json["token"], name="test")
