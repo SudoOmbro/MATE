@@ -1,4 +1,5 @@
-from typing import Tuple
+from types import FunctionType
+from typing import Tuple, Callable
 
 from telegram import Update
 from telegram.ext import CallbackContext
@@ -39,20 +40,23 @@ class Chain:
     Used to call multiple functions from a single handle, useful to avoid creating custom functions for most
     interactions with the Bot.
     Chains can be Nested in other chains to create subroutines
-
-    Parameters:
-
-    args (Tuple[callable]):
-        a tuple containing the functions that will be called,
-        starting from the first and finishing with the last,
-        returning the last non-None value if return_value is not defined.
-    next_state (int or None):
-        if defined then the chain will return the given value,
-        if not it will return the last non-None value.
-        By default, it's not defined, the last non-None value is returned.
     """
 
-    def __init__(self, *args: TelegramFunctionBlueprint or callable, next_state: object or None = None):
+    def __init__(
+            self,
+            *args: Callable[[Update, CallbackContext], object],
+            next_state: object or None = None
+    ):
+        """
+        :param Callable[[Update, CallbackContext], object] args:
+             a tuple containing the functions that will be called,
+             starting from the first and finishing with the last,
+             returning the last non-None value if return_value is not defined.
+        :param object or None next_state:
+             if defined then the chain will return the given value,
+             if not it will return the last non-None value.
+             By default, it's not defined, the last non-None value is returned.
+        """
         self.functions: Tuple = args
         self.next_state: object or None = next_state
 

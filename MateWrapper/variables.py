@@ -1,5 +1,6 @@
 from copy import deepcopy
 from re import match
+from typing import Callable, Union
 
 from telegram import Update
 from telegram.ext import CallbackContext
@@ -14,9 +15,9 @@ class GetVariableGeneric(TelegramFunctionBlueprint):
     def __init__(
             self,
             var_name: str or None,
-            transformation_function: callable = None,
+            transformation_function: Union[Callable[[object, TelegramEvent], object], None] = None,
             next_state: int or None = None,
-            custom_setter_function: callable or None = None
+            custom_setter_function: Union[Callable[[object, str], object], None] = None
     ):
         """
         :param var_name:
@@ -31,17 +32,17 @@ class GetVariableGeneric(TelegramFunctionBlueprint):
 
             if you pass something like "obj_name.var" then this handler will try to put the received value in
             obj_name.var, where onj_name is the context key for the object and var is a variable of said object
-        :param transformation_function:
+        :param Union[Callable[[object, TelegramEvent], object], None] transformation_function:
             a function that will take the variable and transform it somehow before storing it.
 
             the function should have 2 inputs and 1 output, like this:
 
             func(input, event: TelegramEvent):
                 return something
-        :param next_state:
+        :param int or None next_state:
             the return value of the function, used to change state in conversation handlers.
             Leave at None to not change state.
-        :param custom_setter_function:
+        :param Union[Callable[[object, str], object], None] custom_setter_function:
             a custom setter function useful for interacting with objects outside of the context.
 
             the function should have 2 inputs and optionally an integer output, like this:
@@ -181,8 +182,8 @@ class InitDefaultContext(TelegramFunctionBlueprint):
         """
         Used to set the given dictionary as the current user's context.
 
-        :param default_context: the desired context
-        :param clear_context: defines whether the user's context should be cleared before initializing the new one
+        :param dict default_context: the desired context
+        :param bool clear_context: defines whether the user's context should be cleared before initializing the new one
         """
         self.default_context = default_context
         self.clear_context = clear_context

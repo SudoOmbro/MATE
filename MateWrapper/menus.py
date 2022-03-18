@@ -1,13 +1,12 @@
 from functools import cache
-from typing import Dict, List
+from typing import Dict, List, Union, Callable
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Handler, CallbackQueryHandler, ConversationHandler, CallbackContext
 
 from MateWrapper.globals import Globals
 from MateWrapper.prompts import Prompt
-from MateWrapper.generics import Chain
-
+from MateWrapper.generics import Chain, TelegramEvent
 
 __BUTTON_COUNTER: int = 0
 
@@ -162,21 +161,21 @@ class Panel(GenericPanel):
 
     def __init__(
             self,
-            prompt_text: str or callable,
-            buttons: List[Button or List[Button]],
+            prompt_text: Union[str, Callable[[TelegramEvent], str]],
+            buttons: List[Union[Button, List[Button]]],
             back_to: str,
             extra_handlers: List[Handler] or None = None,
     ):
         """
-        :param prompt_text:
+        :param Union[str, Callable[[TelegramEvent], str]] prompt_text:
             The text that will be sent when this panel is shown,
             supports all the same formatting options as the Panel object.
             Can be callable.
-        :param buttons:
+        :param List[Union[Button, List[Button]]] buttons:
             The list of Button objects (or of List[Button]) that will define the functionality of this panel.
-        :param back_to:
+        :param str back_to:
             The name of the Panel to go back to. If "__end__" the back button will close the menu.
-        :param extra_handlers:
+        :param List[Handler] or None extra_handlers:
             A list of extra handlers that can do extra stuff, like read text inputs and stuff like that.
         """
         self.buttons = buttons

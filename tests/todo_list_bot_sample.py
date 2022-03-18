@@ -125,18 +125,18 @@ def main():
             ),
             "edit": Panel(
                 "{current_todo}",
-                buttons=[
+                buttons=[[
                     InputButton(
                         "Edit title",
-                        Prompt("Write the new title\n\n`{current_todo.title}`", use_markdown=True),
+                        Prompt("Write the new title\n\n`{current_todo.title}`", use_markdown=True, delete_last_message=True),
                         TextHandler(GetText("current_todo.title"))
                     ),
                     InputButton(
                         "Edit text",
-                        Prompt("Write the new text\n\n`{current_todo.text}`", use_markdown=True),
+                        Prompt("Write the new text\n\n`{current_todo.text}`", use_markdown=True, delete_last_message=True),
                         TextHandler(GetText("current_todo.text"))
                     )
-                ],
+                ]],
                 back_to="main"
             )
         },
