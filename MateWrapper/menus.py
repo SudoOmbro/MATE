@@ -237,7 +237,7 @@ class Panel(GenericPanel):
 
 
 class GOTO:
-    """ Returns the assigned string, useful for Changing Panel in a custom Panel """
+    """ Compiles to the prompt of the panel given as destination_panel, useful for Changing Panel in a custom Panel """
 
     prompt: Prompt
 
