@@ -15,7 +15,7 @@ while injecting custom logic where necessary.
 It's components are also easily extensible and reusable to allow for a wide degree of 
 flexibility.
 
-There are 4 main types of components:
+There are 5 main types of components:
 
 - ### Prompts:
     A Prompt is what is used to send messages to users, they support Markdown formatting,
@@ -31,6 +31,9 @@ There are 4 main types of components:
     These Chains aren't of the binding kind! Chains let you chain together multiple
     functions (handlers, getters, custom functions or even other chains) in order to
     build complex user interactions using the least possible amount of custom code!
+- ### Menus
+    Connect everything togheter in an easy way with Menus and the ready-made 
+    Panels & Buttons that come with them!
 
 ## Docs
 
