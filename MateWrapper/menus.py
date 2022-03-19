@@ -315,10 +315,10 @@ class Menu(ConversationHandler):
 
     def __compile(self, panels: Dict[object, GenericPanel]) -> Dict[int, List[Handler]]:
         result: Dict[int, List[Handler]] = {}
-        # set panel prompts:
+        # set panel prompts before compiling buttons, necessary to make switching panels easier
         for panel_name in panels:
             panels[panel_name].set_prompt(panel_name)
-        # compile panels
+        # compile panels to make all the handlers functional
         for panel_name in panels:
             self.states[panel_name] = panels[panel_name].get_handlers(_MenuContext(self, panels[panel_name], panels))
         return result

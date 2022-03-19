@@ -104,7 +104,7 @@ class GetVariableGeneric(TelegramFunctionBlueprint):
 
 
 class GetText(GetVariableGeneric):
-    """ Gets a text input from the user and optionally validates it. """
+    """ Gets a text input from the user and optionally validates it, use in conjunction with TextHandler """
 
     def __init__(
             self,
@@ -156,6 +156,7 @@ class GetText(GetVariableGeneric):
 
 
 class GetKeyboardInput(GetVariableGeneric):
+    """ Gets an input from a keyboard, use in conjunction with ButtonHandler """
 
     # TODO? add support for arbitrary_callback_data
     # (I have never used this but the base library supports it so maybe?)
@@ -165,6 +166,7 @@ class GetKeyboardInput(GetVariableGeneric):
 
 
 class GetPhoto(GetVariableGeneric):
+    """ Gets a photo from a PhotoMessage, use in conjunction with PhotoHandler """
 
     def get_from_source(self, event: TelegramEvent):
         file = event.update.message.photo[-1].get_file()
@@ -177,11 +179,10 @@ def clear_vars(update: Update, context: CallbackContext):
 
 
 class InitDefaultContext(TelegramFunctionBlueprint):
+    """ Used to set the given dictionary as the current user's context. """
 
     def __init__(self, default_context: dict, clear_context: bool = False):
         """
-        Used to set the given dictionary as the current user's context.
-
         :param dict default_context: the desired context
         :param bool clear_context: defines whether the user's context should be cleared before initializing the new one
         """

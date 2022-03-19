@@ -24,6 +24,7 @@ class TelegramEvent:
 
 
 class TelegramFunctionBlueprint:
+    """ The generic Telegram Function class that needs to be implemented """
 
     def __call__(self, update: Update, context: CallbackContext) -> int or None:
         return self.logic(TelegramEvent(update, context))
@@ -71,4 +72,10 @@ class Chain:
 
 
 class TelegramUserError(Exception):
+    """
+    This exception is raised if the wrapper detects an error from a user,
+    for example when the validation regex in GetText does not match the input.
+
+    It's handles automatically by the default error handler, but you can implement your own handler.
+    """
     pass
