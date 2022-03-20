@@ -37,8 +37,9 @@ There are 5 main types of components:
 
 ## Docs
 
-the documentation is being written! The code is commented in an
-extensive way in the meantime though :)
+Read the documentation [here](https://matewrapper.readthedocs.io/en/latest/)!
+
+It's an early version but it will be updated with examples and stuff :)
 
 ## Contributing
 
