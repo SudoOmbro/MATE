@@ -12,6 +12,7 @@ __BUTTON_COUNTER: int = 0
 
 
 def _get_button_handle() -> str:
+    """ generate a unique callback pattern for each button """
     global __BUTTON_COUNTER
     current_id = __BUTTON_COUNTER
     __BUTTON_COUNTER += 1
@@ -29,6 +30,12 @@ class _MenuContext:
 
 @cache
 def get_back_button_handler(current_panel: "Panel") -> CallbackQueryHandler:
+    """
+    returns a Handler for BACK_PATTERN that returns the user to current_panel
+
+    :param current_panel: the destination panel
+    :return: a handler for BACK_PATTERN that returns the user to current_panel
+    """
     return CallbackQueryHandler(current_panel.prompt, pattern=Globals.BACK_PATTERN)
 
 
@@ -36,18 +43,35 @@ class Button:
     """ generic keyboard button class to implement """
 
     def __init__(self, text: str):
+        """
+        sets the buttons text & generates a unique handle (callback pattern) for this button.
+
+        :param str text: the text that will be shown on the button (Long texts will be shortened)
+        """
         if not text:
             raise ValueError("A button needs some text in it")
         self.text: str = text
         self.handle: str = _get_button_handle()
 
     def compile(self, context: _MenuContext):
+        """
+        Compiles the button given the menu context, useful if the button needs some context info to function,
+        like for example buttons that change panel need to access the destination panel's prompt.
+
+        By default, it does nothing and isn't mandatory to implement.
+        """
         pass
 
     def get_next_state_handlers(self) -> Handler or List[Handler] or None:
+        """
+        Used mainly by input buttons. If this function returns a Handler or a list of Handlers then it tells the
+        menu that this button spawns a sub-panel with its own handlers that then immediately returns to the
+        current panel.
+        """
         return None
 
     def get_handler(self) -> Handler or None:
+        """ returns this buttons Handlers """
         return None
 
     def get_keyboard_button(self) -> InlineKeyboardButton:
@@ -143,14 +167,17 @@ class InputButton(Button):
 
 
 class GenericPanel:
-    """ Panel prototype """
+    """ Panel prototype that needs to be implemented """
 
     prompt: Prompt
+    """ the prompt to set with set_prompt """
 
     def set_prompt(self, current_state: object):
+        """ This sets the prompt tied to the panel that needs to be shown when switching to it. """
         raise NotImplemented
 
     def get_handlers(self, context: _MenuContext) -> List[Handler]:
+        """ This is used by the menu object to compile panels into handlers. """
         raise NotImplemented
 
 
@@ -278,7 +305,10 @@ class CustomPanel(GenericPanel):
 
 class Menu(ConversationHandler):
     """
-    A menu, container for one or more (usually more) panels
+    A menu, container for one or more (usually more) panels.
+
+    At init time it automatically "compiles" the panels into handlers & callback handlers to ensure maximum runtime
+    performance while retaining the simplicity of the wrapper.
     """
 
     def __init__(
