@@ -101,8 +101,90 @@ Using Menus
 Now, while Prompts are quite convenient & Building bots that echo what you said or tell you your name/id is pretty cool,
 where this wrapper gets spicy is with the introduction Menus, Panels & Buttons
 
-TODO
+For example let's take a look at **tests/choice_sample.py**:
+
+.. code-block:: python
+
+    from telegram.ext import CommandHandler
+
+    from MateWrapper.bot import TelegramBot
+    from MateWrapper.globals import Globals
+    from MateWrapper.menus import Menu, Panel, FuncButton, InputButton
+    from MateWrapper.prompts import Prompt
+    from MateWrapper.handlers import TextHandler
+    from MateWrapper.variables import GetText
+
+
+    def main():
+        bot = TelegramBot(token="your bot token")
+        bot.add_handler(Menu(
+            entry_points=[CommandHandler("start", Globals.ENTRY_POINT)],
+            panels={
+                "main": Panel(
+                    "Hi there {__name}, what do you want to do?",
+                    [
+                        [
+                            FuncButton(
+                                "show ID",
+                                Prompt("Your id is `{__id}`")
+                            ),
+                            InputButton(
+                                "Echo",
+                                Prompt("okay, send some text", delete_last_message=True, keyboard=Globals.BACK_KEYBOARD),
+                                TextHandler(GetText("text"))
+                            )
+                        ],
+                        FuncButton(
+                            "What did i say?",
+                            Prompt("You said: '{text}'")
+                        ),
+                    ],
+                    back_to=Globals.CLOSE_MENU,
+                )
+            },
+            main_panel="main",
+            fallbacks=[CommandHandler("end", Globals.END_HANDLER)]
+        ))
+        bot.add_handler(
+            CommandHandler("about", Prompt(
+                "Bot made by [SudoOmbro](https://github.com/SudoOmbro)",
+                use_markdown=True)
+            )
+        )
+        bot.start_and_idle()
+
+
+    if __name__ == '__main__':
+        main()
+
+With 36 (less than 36 actually, most of them are line with one character)
+lines of code we built a fully fledged telegram bot that looks like this when started:
+
+TODO add image
+
+& it can even store & print a variable the user inputs!
+How was it achieved? Let's look at the various components:
+
+- **CommandHandler**:
+    This is just an Handler imported from telegram.ext, note that all base handlers found in telegram.ext are 100%
+    compatible with the wrapper, as they are the base for it's own implementation of handlers.
+- **Menu**:
+    TODO
+- **Panel**:
+    TODO
+- **FuncButton**:
+    TODO
+- **InputButton**:
+    TODO
 
 Advanced usage
 --------------
+TODO
+
+Custom Panels
+~~~~~~~~~~~~~
+TODO
+
+Generating keyboards from lists
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 TODO
