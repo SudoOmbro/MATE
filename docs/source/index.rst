@@ -13,3 +13,5 @@ while injecting custom logic where necessary.
 .. toctree::
 
    Modules
+   Quickstart
+   Context directives
