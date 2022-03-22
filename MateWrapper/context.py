@@ -15,7 +15,14 @@ from MateWrapper.generics import TelegramEvent
 
 
 class MATEVarHandler:
-    """ Handles access to value either in the update or the context """
+    """
+    Handles access to value either in the update or the context.
+
+    This class is generic and nis implemented in MATEVarGetter & MATEVarSetter.
+
+    These kind of classes aren't supposed to be instanced manually
+    but are instead automatically instanced by the wrapper.
+    """
 
     HANDLERS: Dict[int, Tuple[callable, callable or None]]
 
@@ -69,6 +76,9 @@ class MATEVarHandler:
 
 
 class MATEVarGetter(MATEVarHandler):
+    """
+    Handles getting variables from the context, can access update data
+    """
 
     def __get_variable(self, event: TelegramEvent):
         return event.context.chat_data[self.args]
@@ -117,6 +127,9 @@ class MATEVarGetter(MATEVarHandler):
 
 
 class MATEVarSetter(MATEVarHandler):
+    """
+    Handles setting variables in the context, cannot access update data
+    """
 
     def __set_variable(self, user_input, event: TelegramEvent):
         event.context.chat_data[self.args] = user_input

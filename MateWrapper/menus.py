@@ -55,6 +55,8 @@ class Button:
 
     def compile(self, context: _MenuContext):
         """
+        This function should only be called ad init time by a Menu object.
+
         Compiles the button given the menu context, useful if the button needs some context info to function,
         like for example buttons that change panel need to access the destination panel's prompt.
 
@@ -284,6 +286,11 @@ class CustomPanel(GenericPanel):
     """ An extremely simple implementation of a Panel, useful for building very dynamic apps """
 
     def __init__(self, prompt: Prompt, handlers: List[Handler], auto_handle_state: bool = True):
+        """
+        :param prompt: The prompt that will be shown by this panel
+        :param handlers: The list of handlers tied to this panel
+        :param auto_handle_state: Define if the prompt's state will be automatically handled by the wrapper.
+        """
         self.prompt = prompt
         self.handlers = handlers
         self.auto_handle_state = auto_handle_state

@@ -16,6 +16,10 @@ class Globals:
     assign this as callback data to a custom button to give it the function of going to the previous panel.
     """
     CLOSE_MENU = "__end__"
+    END_CONVERSATION = ConversationHandler.END
+    """
+    If you assign this as next_state to any function it will close the current menu.
+    """
 
     # Buttons
     BACK_BUTTON = InlineKeyboardButton(text="\U00002B05 Back", callback_data=BACK_PATTERN)

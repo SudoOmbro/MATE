@@ -10,7 +10,7 @@ from MateWrapper.generics import TelegramFunctionBlueprint, TelegramEvent, Teleg
 
 
 class GetVariableGeneric(TelegramFunctionBlueprint):
-    """ Generic class to handle variables in the wrapper, needs to be implemented """
+    """ Generic class to handle getting variables in the wrapper, needs to be implemented """
 
     def __init__(
             self,
@@ -130,6 +130,9 @@ class GetText(GetVariableGeneric):
             see GetVariableGeneric
         :param callable or None custom_setter_function:
             see GetVariableGeneric
+        :raise TelegramUserError:
+            if validation is enabled and the given text doesn't match
+            the given regex this function will raise a TelegramUserError with the given error_message as error message.
         """
         super().__init__(
             var_name,

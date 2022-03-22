@@ -5,9 +5,6 @@ from telegram.ext import CallbackQueryHandler, MessageHandler, Filters, Conversa
 from MateWrapper.generics import TelegramFunctionBlueprint
 
 
-END_CONVERSATION = ConversationHandler.END
-
-
 class ButtonHandler(CallbackQueryHandler):
     """ Handles Button inputs, it's just an alis for CallbackQueryHandler """
     pass

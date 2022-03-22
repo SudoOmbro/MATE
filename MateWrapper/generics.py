@@ -6,13 +6,12 @@ from telegram.ext import CallbackContext
 
 
 class TelegramEvent:
+    """ A convenient wrapper of received events. Automatically instanced by the wrapper. """
 
     def __init__(self, update: Update, context: CallbackContext):
         """
-        A convenient wrapper of received events.
-
-        :param update: The telegram update that caused the event
-        :param context: The telegram context tied to the user that caused the event
+        :param Update update: The telegram update that caused the event
+        :param CallbackContext context: The telegram context tied to the user that caused the event
         """
         self.update: Update = update
         self.context: CallbackContext = context
@@ -20,11 +19,16 @@ class TelegramEvent:
         self.vars = context.chat_data  # for convenience
 
     def reply(self, text: str, **kwargs):
+        """ send message to the user that generated this event. Supports all kwargs of send_message. """
         self.context.bot.send_message(text, chat_id=self.update.effective_chat.id, **kwargs)
 
 
 class TelegramFunctionBlueprint:
-    """ The generic Telegram Function class that needs to be implemented """
+    """
+    The generic Telegram Function class that needs to be implemented.
+
+    This class is callable.
+    """
 
     def __call__(self, update: Update, context: CallbackContext) -> int or None:
         return self.logic(TelegramEvent(update, context))
@@ -32,7 +36,11 @@ class TelegramFunctionBlueprint:
     def __str__(self):
         return str(self.__dict__)
 
-    def logic(self, event: TelegramEvent):
+    def logic(self, event: TelegramEvent) -> object or None:
+        """
+        How this method is implemented determines what the function is going to do.
+        What this method returns defines the next state that the menu needs to be in.
+        """
         raise NotImplemented
 
 
@@ -40,7 +48,9 @@ class Chain:
     """
     Used to call multiple functions from a single handle, useful to avoid creating custom functions for most
     interactions with the Bot.
-    Chains can be Nested in other chains to create subroutines
+    Chains can be Nested in other chains to create subroutines.
+
+    This class is callable.
     """
 
     def __init__(
@@ -76,6 +86,6 @@ class TelegramUserError(Exception):
     This exception is raised if the wrapper detects an error from a user,
     for example when the validation regex in GetText does not match the input.
 
-    It's handles automatically by the default error handler, but you can implement your own handler.
+    It's handled automatically by the default error handler, but you can implement your own handler.
     """
     pass
