@@ -6,3 +6,11 @@ aimed to teach the basics and how to best use the features of this wrapper.
 Your first bot
 --------------
 TODO
+
+Using Menus
+-----------
+TODO
+
+Advanced usage
+--------------
+TODO
