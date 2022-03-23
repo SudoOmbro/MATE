@@ -6,14 +6,15 @@ from telegram.ext import CommandHandler, CallbackContext
 
 from MateWrapper.bot import TelegramBot
 from MateWrapper.globals import Globals
+from MateWrapper.keyboards import get_keyboard_from_list_custom_row
 from MateWrapper.menus import Menu, Panel, InputButton, CustomPanel, GOTO
 from MateWrapper.prompts import Prompt
 from MateWrapper.handlers import TextHandler, ButtonHandler
 from MateWrapper.variables import GetText, InitDefaultContext
-from MateWrapper.generics import Chain
+from MateWrapper.generics import Chain, TelegramEvent
 
 
-# Classes
+# Model
 
 class TODOEntry:
 
@@ -49,27 +50,34 @@ class EntryList:
         self.entry_list.append(new_entry)
         return new_entry
 
-    def get_keyboard(self) -> InlineKeyboardMarkup:
-        keyboard_list: List[List[InlineKeyboardButton]] = []
-        for entry in self.entry_list:
-            keyboard_list.append([
-                InlineKeyboardButton(entry.title, callback_data=f"show {entry.id}"),
-                InlineKeyboardButton("\U0000270F", callback_data=f"edit {entry.id}"),  # Pencil emoji
-                InlineKeyboardButton("\U0001F5D1", callback_data=f"del {entry.id}")  # Trash emoji
-            ])
-        keyboard_list.append([InlineKeyboardButton("\U00002795", callback_data="add")])  # Plus emoji
-        keyboard_list.append([Globals.BACK_BUTTON])
-        return InlineKeyboardMarkup(keyboard_list)
 
-
-# Custom callback handlers
+# Controller
 
 def get_id_from_query(update: Update) -> int:
     return int(update.callback_query.data.split(" ")[1])
 
 
+def get_todo_keyboard_row(entry: TODOEntry) -> List[InlineKeyboardButton]:
+    return [
+        InlineKeyboardButton(entry.title, callback_data=f"show {entry.id}"),
+        InlineKeyboardButton("\U0000270F", callback_data=f"edit {entry.id}"),  # Pencil emoji
+        InlineKeyboardButton("\U0001F5D1", callback_data=f"del {entry.id}")  # Trash emoji
+    ]
+
+
+TODO_KEYBOARD_ADD = [[InlineKeyboardButton("\U00002795", callback_data="add")]]  # Plus emoji
+
+
+def get_todo_keyboard(event: TelegramEvent) -> InlineKeyboardMarkup:
+    return get_keyboard_from_list_custom_row(
+        event.context.chat_data["list"].entry_list,
+        get_todo_keyboard_row,
+        post_keyboard=TODO_KEYBOARD_ADD,
+        add_back_button=True
+    )
+
+
 def show_todo(update: Update, context: CallbackContext):
-    # If you squint really hard, this could be a lambda
     chat_id = update.effective_chat.id
     entry_id = get_id_from_query(update)
     context.bot.send_message(
@@ -80,21 +88,18 @@ def show_todo(update: Update, context: CallbackContext):
 
 
 def edit_todo(update: Update, context: CallbackContext):
-    # This could be a lambda
     context.chat_data["current_todo"] = context.chat_data["list"].get_entry(get_id_from_query(update))
 
 
 def delete_todo(update: Update, context: CallbackContext):
-    # This could be a lambda too
     context.chat_data["list"].delete_entry(get_id_from_query(update))
 
 
 def add_todo(update: Update, context: CallbackContext):
-    # Yup, this could be a lambda too
     context.chat_data["current_todo"] = context.chat_data["list"].add_entry()
 
 
-# Bot
+# Bot (view)
 
 def main():
     """ Very simple app, does not save the context but that wouldn't be too hard to do """
@@ -112,7 +117,7 @@ def main():
             "main": CustomPanel(
                 Prompt(
                     "Here are your TODOs",
-                    keyboard=lambda event: event.context.chat_data["list"].get_keyboard(),
+                    keyboard=get_todo_keyboard,
                     delete_last_message=True
                 ),
                 [

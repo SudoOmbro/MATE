@@ -2,6 +2,7 @@ from typing import List, Callable, Union, TypeVar
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
+from MateWrapper.generics import TelegramEvent
 from MateWrapper.globals import Globals
 
 
@@ -21,7 +22,7 @@ def _add_back_button(
         if custom_back_text:
             keyboard_list.append([InlineKeyboardButton(text=custom_back_text, callback_data=Globals.BACK_PATTERN)])
         else:
-            keyboard_list.append([InlineKeyboardButton(Globals.BACK_BUTTON)])
+            keyboard_list.append([Globals.BACK_BUTTON])
 
 
 def get_keyboard_from_list(
@@ -85,7 +86,7 @@ def get_keyboard_from_list(
     return InlineKeyboardMarkup(keyboard_list)
 
 
-def get_keyboard_custom_row(
+def get_keyboard_from_list_custom_row(
         input_list: List[T],
         row_generator_function: Callable[[T], List[InlineKeyboardButton]],
         pre_keyboard: Union[List[List[InlineKeyboardButton]], None] = None,
@@ -121,4 +122,3 @@ def get_keyboard_custom_row(
     # add back button if wanted
     _add_back_button(keyboard_list, add_back_button, custom_back_text)
     return InlineKeyboardMarkup(keyboard_list)
-
