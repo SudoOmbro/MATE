@@ -34,7 +34,7 @@ There are 5 main types of components:
     functions (handlers, getters, custom functions or even other chains) in order to
     build complex user interactions using the least possible amount of custom code!
 - ### Menus
-    Connect everything togheter in an easy way with Menus and the ready-made 
+    Connect everything together in an easy way with Menus and the ready-made 
     Panels & Buttons that come with them!
 
 ## Docs
