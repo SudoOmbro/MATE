@@ -1,4 +1,4 @@
-# MATE
+# 🦙 MATE
 _The Easy Telegram Application Maker_
 
 Welcome to MATE, the open source wrapper for the 
@@ -38,8 +38,6 @@ There are 5 main types of components:
 ## Docs
 
 Read the documentation [here](https://matewrapper.readthedocs.io/en/latest/)!
-
-It's an early version but it will be updated with examples and stuff :)
 
 ## Contributing
 

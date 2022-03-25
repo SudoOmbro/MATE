@@ -157,10 +157,11 @@ For example let's take a look at **tests/choice_sample.py**:
     if __name__ == '__main__':
         main()
 
-With 36 (less than 36 actually, most of them are line with one character)
+With 36 (less than 36 actually, most of them are lines with one character)
 lines of code we built a fully fledged telegram bot that looks like this when started:
 
-TODO add image
+.. image:: _static/choiche_sample.png
+    :width: 400
 
 & it can even store & print a variable the user inputs!
 How was it achieved? Let's look at the various components:
@@ -168,17 +169,44 @@ How was it achieved? Let's look at the various components:
 - **CommandHandler**:
     This is just an Handler imported from telegram.ext, note that all base handlers found in telegram.ext are 100%
     compatible with the wrapper, as they are the base for it's own implementation of handlers.
+
+    This handler will only handle "/command" messages.
 - **Menu**:
-    TODO
+    This is one of the most important handlers that comes with MATE, it is **used for building keyboard based menus**
+    in a simple & intuitive way.
+
+    It's basically a wrapper over ``telegram.ext.ConversationHandler`` that, instead of having you manually setup
+    conversation states, the handlers tied to each conversation state & callbacks, will automatically generate
+    everything starting from a Dictionary of panels.
+
+    Why a dictionary? So that the string key assigned to a ``Panel`` becomes said ``Panel``'s name
+    that you can reference from other panels, thus creating "Submenus".
+
+    Also, what is ``Globals.ENTRY_POINT``? Well, that is a placeholder function that will be **replaced automatically**
+    by the ``Menu`` at init time with the ``Prompt`` from the Panel set as the main one (this is done by setting the
+    ``main_panel`` parameter to the name of the ``Panel`` you want to be the main one), thus letting the user access
+    it when on of the ``entry_points`` handlers conditions is satisfied.
 - **Panel**:
-    TODO
+    But what is a Panel? Well, on a purely code based level, it's just an ordered collection of ``Button`` objects and
+    of extra handlers. On a more conceptual level, you can see a Panel basically as a "view" of the menu, a "submenu"
+    if you will, basically just a Prompt with buttons that do stuff.
 - **FuncButton**:
     TODO
 - **InputButton**:
     TODO
+- **GetText**:
+    TODO
 
 Advanced usage
 --------------
+This section will talk a bit about some of the more advanced features of MATE,
+for an example that uses **all of them** refer to:
+
+.. automodule:: tests.todo_list_bot_sample
+    :members:
+
+Chains
+~~~~~~
 TODO
 
 Custom Panels
