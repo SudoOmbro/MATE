@@ -1,6 +1,8 @@
 # 🦙 MATE
 _The Easy Telegram Application Maker_
 
+```pip install mate-wrapper```
+
 Welcome to MATE, the open source wrapper for the 
 [PythonTelegramBot wrapper](https://github.com/python-telegram-bot/python-telegram-bot)
 that makes building telegram applications very **easy** and **intuitive** by adopting 
