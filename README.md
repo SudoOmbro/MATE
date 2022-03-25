@@ -37,6 +37,24 @@ There are 5 main types of components:
     Connect everything together in an easy way with Menus and the ready-made 
     Panels & Buttons that come with them!
 
+## Simple example
+Here's how a simple echo bot looks like!
+```python
+from MateWrapper.bot import TelegramBot
+from MateWrapper.handlers import TextHandler
+from MateWrapper.prompts import Prompt
+
+
+def main():
+    bot = TelegramBot("[Your token]", name="test")
+    bot.add_handler(TextHandler(Prompt("Hi {__name}, you said: {_text}")))
+    bot.start_and_idle()
+
+
+if __name__ == "__main__":
+    main()
+```
+
 ## Docs
 
 Read the documentation [here](https://matewrapper.readthedocs.io/en/latest/)!
