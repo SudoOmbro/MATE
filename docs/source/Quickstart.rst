@@ -59,9 +59,10 @@ With this instruction we are basically telling the bot that, when it receives a 
 it should send a text message containing *"you said: {_text}"*.
 
 
-Speaking of prompts, whenever you put a word between curly brackets in the text, you are giving the prompt a
-**context directive**, these can be of many different types, in our case we are using a special type of
-directive exclusive to prompts that will be replace with the text that the user just sent.
+Speaking of  ``Prompts`` (docs here: :ref:`Modules:prompts module`), whenever you put a word between curly
+brackets in the text, you are giving the prompt a **context directive**, these can be of many different types,
+in our case we are using a special type of directive exclusive to prompts that will be replace with the
+text that the user just sent.
 
 For more info about **context directives**, see :doc:`Context directives`.
 
@@ -163,7 +164,7 @@ lines of code we built a fully fledged telegram bot that looks like this when st
 .. image:: _static/choiche_sample.png
     :width: 400
 
-& it can even store & print a variable the user inputs!
+It even has a "/about" command and it can store & print a variable the user inputs!
 How was it achieved? Let's look at the various components:
 
 - **CommandHandler**:
@@ -190,12 +191,41 @@ How was it achieved? Let's look at the various components:
     But what is a Panel? Well, on a purely code based level, it's just an ordered collection of ``Button`` objects and
     of extra handlers. On a more conceptual level, you can see a Panel basically as a "view" of the menu, a "submenu"
     if you will, basically just a Prompt with buttons that do stuff.
+
+    As you can see from :ref:`Modules:menus module`, you can pass a few values when creating a panel, the most important one of these
+    being ``buttons``, this parameter will determine not only how the panel will look, but also what the buttons will do.
+    ``buttons`` is a **list of either buttons or lists of buttons**, basically the first level of the list determines the
+    row in which the button(s) will appear, while the second level of list will determine the column of the button. So:
+
+    .. code-block:: python
+
+        buttons = [
+            [button1, button2],
+            [button3]
+        ]
+
+    will appear as:
+
+    .. image:: _static/button_schema_example.png
+        :width: 400
 - **FuncButton**:
-    TODO
+    An implementation of the generic ``Button`` class (documented in :ref:`Modules:menus module`) that
+    executes the function passed to it through the ``function`` parameter when clicked.
 - **InputButton**:
-    TODO
+    A special kind of button that will **automatically generate it's state & callback to get an input from the user**.
+    In order to support a generic input, an handler (or a list of handlers) with a callback already setup needs to be
+    passed to this button through the input ``input_handlers`` parameter.
+
+    A ``Prompt`` also needs to be passed to this button; Said prompt will be displayed to
+    the user when awaiting for his/her input.
 - **GetText**:
-    TODO
+    An implementation of ``GetVariableGeneric``,
+    this function automatically accesses the latest update from the user and puts the received text in the specified
+    place (either trough a **Context directive**, documented in :doc:`Context directives`, or a ``custom setter function``).
+
+    Optionally it can even transform the input through a ``transformation function``.
+
+    Other types of getters also exist, see :ref:`Modules:variables module` for more info.
 
 Advanced usage
 --------------
@@ -207,12 +237,33 @@ for an example that uses **all of them** refer to:
 
 Chains
 ~~~~~~
-TODO
+Chains are **a way of chaining together multiple functions** in a single handler, allowing you to create subroutines
+that spare you code repetition. They can be put anywhere a callback should go (generally inside an ``Handler``)
+and you can even put chains inside other chains!
+
+see ``Chain`` in :ref:`Modules:generics module` for more info
 
 Custom Panels
 ~~~~~~~~~~~~~
-TODO
+A bare bones implementation of the ``GenericPanel`` class that lets you customize
+the panel's prompt in detail and requires you to setup every single handler yourself.
+A good example of this Type on panel's usage can be found in the TODO list sample you
+can find reference at the start of this paragraph.
+
+Useful if you want to build an highly custom and dynamic panel inside your menu.
+
+See ``CustomPanel`` in :ref:`Modules:menus module` for more info.
 
 Generating keyboards from lists
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-TODO
+Sometimes you need to generate dynamic keyboards from lists of things, since i found it to be a pretty
+common occurrence i built some helper functions that make doing it pretty easy:
+
+- ``get_keyboard_from_list``:
+    lets you generate a keyboard in a pretty standard way, automatically taking care of how the buttons are
+    generated while letting you define a few parameters of the generated keyboard.
+- ``get_keyboard_from_list_custom_row``:
+    lets you get more "low level" with the keyboard generation, requiring you to pass in a function that
+    will be used to generate a row of the keyboard.
+
+See :ref:`Modules:keyboards module` for more info on both functions.
