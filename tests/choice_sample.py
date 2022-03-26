@@ -4,10 +4,13 @@ from telegram.ext import CommandHandler
 
 from MateWrapper.bot import TelegramBot
 from MateWrapper.globals import Globals
-from MateWrapper.menus import Menu, Panel, FuncButton, InputButton
 from MateWrapper.prompts import Prompt
 from MateWrapper.handlers import TextHandler
 from MateWrapper.variables import GetText
+
+from MateMenus.buttons import FuncButton, InputButton
+from MateMenus.generics import Menu
+from MateMenus.panels import Panel
 
 
 def main():

@@ -6,12 +6,15 @@ from telegram.ext import CommandHandler, CallbackContext
 
 from MateWrapper.bot import TelegramBot
 from MateWrapper.globals import Globals
-from MateWrapper.keyboards import get_keyboard_from_list_custom_row
-from MateWrapper.menus import Menu, Panel, InputButton, CustomPanel, GOTO
+from MateMenus.keyboards import get_keyboard_from_list_custom_row
 from MateWrapper.prompts import Prompt
 from MateWrapper.handlers import TextHandler, ButtonHandler
 from MateWrapper.variables import GetText, InitDefaultContext
 from MateWrapper.generics import Chain, TelegramEvent
+
+from MateMenus.buttons import InputButton
+from MateMenus.generics import Menu
+from MateMenus.panels import CustomPanel, GOTO, Panel
 
 
 # Model

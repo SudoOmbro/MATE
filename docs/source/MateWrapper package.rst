@@ -1,6 +1,7 @@
-Modules
-=======
-Complete docs of every module with all the important classes documented.
+MateWrapper
+===========
+This package contains all the basic classes that wrap around the python telegram bot ext package
+to ease bot development, like handlers, prompts & getters
 
 bot module
 ----------
@@ -15,15 +16,6 @@ generics module
 This module contains stuff that is used all around the wrapper & Chains.
 
 .. automodule:: MateWrapper.generics
-   :members:
-   :special-members: __init__
-
-menus module
-------------
-This module contains classes useful for easily
-building complex **keyboard & message based** interfaces.
-
-.. automodule:: MateWrapper.menus
    :members:
    :special-members: __init__
 
@@ -52,13 +44,6 @@ Normally you are not going to touch this module but it's documented for posterit
 .. automodule:: MateWrapper.variables
    :members:
    :special-members: __init__
-
-keyboards module
-----------------
-This module contains functions that make building custom keyboards easier.
-
-.. automodule:: MateWrapper.keyboards
-   :members:
 
 globals module
 --------------

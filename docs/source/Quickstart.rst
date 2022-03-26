@@ -59,7 +59,7 @@ With this instruction we are basically telling the bot that, when it receives a 
 it should send a text message containing *"you said: {_text}"*.
 
 
-Speaking of  ``Prompts`` (docs here: :ref:`Modules:prompts module`), whenever you put a word between curly
+Speaking of  ``Prompts`` (docs here: :ref:`MateWrapper package:prompts module`), whenever you put a word between curly
 brackets in the text, you are giving the prompt a **context directive**, these can be of many different types,
 in our case we are using a special type of directive exclusive to prompts that will be replace with the
 text that the user just sent.
@@ -110,14 +110,17 @@ For example let's take a look at **tests/choice_sample.py**:
 
     from MateWrapper.bot import TelegramBot
     from MateWrapper.globals import Globals
-    from MateWrapper.menus import Menu, Panel, FuncButton, InputButton
     from MateWrapper.prompts import Prompt
     from MateWrapper.handlers import TextHandler
     from MateWrapper.variables import GetText
 
+    from MateMenus.buttons import FuncButton, InputButton
+    from MateMenus.generics import Menu
+    from MateMenus.panels import Panel
+
 
     def main():
-        bot = TelegramBot(token="your bot token")
+        bot = TelegramBot("[Your token]", name="test")
         bot.add_handler(Menu(
             entry_points=[CommandHandler("start", Globals.ENTRY_POINT)],
             panels={
@@ -192,7 +195,7 @@ How was it achieved? Let's look at the various components:
     of extra handlers. On a more conceptual level, you can see a Panel basically as a "view" of the menu, a "submenu"
     if you will, basically just a Prompt with buttons that do stuff.
 
-    As you can see from :ref:`Modules:menus module`, you can pass a few values when creating a panel, the most important one of these
+    As you can see from :ref:`MateMenus package:panels module`, you can pass a few values when creating a panel, the most important one of these
     being ``buttons``, this parameter will determine not only how the panel will look, but also what the buttons will do.
     ``buttons`` is a **list of either buttons or lists of buttons**, basically the first level of the list determines the
     row in which the button(s) will appear, while the second level of list will determine the column of the button. So:
@@ -209,7 +212,7 @@ How was it achieved? Let's look at the various components:
     .. image:: _static/button_schema_example.png
         :width: 400
 - **FuncButton**:
-    An implementation of the generic ``Button`` class (documented in :ref:`Modules:menus module`) that
+    An implementation of the generic ``Button`` class (documented in :ref:`MateMenus package:buttons module`) that
     executes the function passed to it through the ``function`` parameter when clicked.
 - **InputButton**:
     A special kind of button that will **automatically generate it's state & callback to get an input from the user**.
@@ -225,7 +228,7 @@ How was it achieved? Let's look at the various components:
 
     Optionally it can even transform the input through a ``transformation function``.
 
-    Other types of getters also exist, see :ref:`Modules:variables module` for more info.
+    Other types of getters also exist, see :ref:`MateWrapper package:variables module` for more info.
 
 Advanced usage
 --------------
@@ -241,7 +244,7 @@ Chains are **a way of chaining together multiple functions** in a single handler
 that spare you code repetition. They can be put anywhere a callback should go (generally inside an ``Handler``)
 and you can even put chains inside other chains!
 
-see ``Chain`` in :ref:`Modules:generics module` for more info
+see ``Chain`` in :ref:`MateWrapper package:generics module` for more info
 
 Custom Panels
 ~~~~~~~~~~~~~
@@ -252,7 +255,7 @@ can find reference at the start of this paragraph.
 
 Useful if you want to build an highly custom and dynamic panel inside your menu.
 
-See ``CustomPanel`` in :ref:`Modules:menus module` for more info.
+See ``CustomPanel`` in :ref:`MateMenus package:panels module` for more info.
 
 Generating keyboards from lists
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -266,4 +269,4 @@ common occurrence i built some helper functions that make doing it pretty easy:
     lets you get more "low level" with the keyboard generation, requiring you to pass in a function that
     will be used to generate a row of the keyboard.
 
-See :ref:`Modules:keyboards module` for more info on both functions.
+See :ref:`MateMenus package:keyboards module` for more info on both functions.

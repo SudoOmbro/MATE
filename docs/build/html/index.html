@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Modules" href="Modules.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Quickstart" href="Quickstart.html" />
 
     <meta name="generator" content="sphinx-4.4.0, furo 2022.03.04"/>
-        <title>MATE 0.1 documentation</title>
+        <title>MATE 1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
@@ -121,7 +121,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="#"><div class="brand">MATE 0.1 documentation</div></a>
+      <a href="#"><div class="brand">MATE 1.1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -132,7 +132,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -144,7 +144,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="#">
   
   
-  <span class="sidebar-brand-text">MATE 0.1 documentation</span>
+  <span class="sidebar-brand-text">MATE 1.1 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -153,8 +153,9 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul>
-<li class="toctree-l1"><a class="reference internal" href="Modules.html">Modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MateWrapper%20package.html">MateWrapper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MateMenus%20package.html">MateMenus</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Context%20directives.html">Context directives</a></li>
 </ul>
 
@@ -182,7 +183,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -190,22 +191,34 @@
         <article role="main">
           <section id="welcome-to-mate-s-documentation">
 <h1>Welcome to MATE’s documentation!<a class="headerlink" href="#welcome-to-mate-s-documentation" title="Permalink to this headline">#</a></h1>
-<p>MATE is designed as a way to build telegram applications which involves <strong>using as little
+<p>The <em>Easy Telegram Application Maker</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">mate</span><span class="o">-</span><span class="n">wrapper</span>
+</pre></div>
+</div>
+<section id="what-is-mate">
+<h2>What is MATE?<a class="headerlink" href="#what-is-mate" title="Permalink to this headline">#</a></h2>
+<p>MATE is a way of building telegram applications which involves <strong>using as little
 custom code as possible</strong>, relying on tested and safe solutions to do <em>~90%</em> of the work
-while injecting custom logic where necessary.</p>
+while injecting custom logic only where necessary.</p>
+<p>It has 2 main packages:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><a class="reference internal" href="MateWrapper%20package.html"><span class="doc">MateWrapper</span></a>:</dt><dd><p>The basic wrapper built around the python-telegram-bot telegram.ext package, provides functions &amp; classes
+useful to simplify building bots while still using the base framework.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="MateMenus%20package.html"><span class="doc">MateMenus</span></a>:</dt><dd><p>This package is built on top of the previous one and basically transforms MATE into it’s own framework.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="index">
+<h2>Index<a class="headerlink" href="#index" title="Permalink to this headline">#</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Modules.html">Modules</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="Modules.html#bot-module">bot module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Modules.html#generics-module">generics module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Modules.html#menus-module">menus module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Modules.html#handlers-module">handlers module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Modules.html#prompts-module">prompts module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Modules.html#variables-module">variables module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Modules.html#keyboards-module">keyboards module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Modules.html#globals-module">globals module</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="Quickstart.html">Quickstart</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="Quickstart.html#your-first-bot">Your first bot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Quickstart.html#using-menus">Using Menus</a></li>
@@ -217,6 +230,22 @@ while injecting custom logic where necessary.</p>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="MateWrapper%20package.html">MateWrapper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MateWrapper%20package.html#bot-module">bot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MateWrapper%20package.html#generics-module">generics module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MateWrapper%20package.html#handlers-module">handlers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MateWrapper%20package.html#prompts-module">prompts module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MateWrapper%20package.html#variables-module">variables module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MateWrapper%20package.html#globals-module">globals module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="MateMenus%20package.html">MateMenus</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MateMenus%20package.html#generics-module">generics module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MateMenus%20package.html#buttons-module">buttons module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MateMenus%20package.html#panels-module">panels module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MateMenus%20package.html#keyboards-module">keyboards module</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="Context%20directives.html">Context directives</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="Context%20directives.html#prompt">Prompt</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Context%20directives.html#vargetter">VarGetter</a></li>
@@ -225,18 +254,19 @@ while injecting custom logic where necessary.</p>
 </ul>
 </div>
 </section>
+</section>
 
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="Modules.html">
+          <a class="next-page" href="Quickstart.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Modules</div>
+                <div class="title">Quickstart</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -261,8 +291,28 @@ while injecting custom logic where necessary.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Welcome to MATE’s documentation!</a><ul>
+<li><a class="reference internal" href="#what-is-mate">What is MATE?</a></li>
+<li><a class="reference internal" href="#index">Index</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
