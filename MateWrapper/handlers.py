@@ -6,7 +6,7 @@ from MateWrapper.generics import TelegramFunctionBlueprint
 
 
 class ButtonHandler(CallbackQueryHandler):
-    """ Handles Button inputs, it's just an alis for CallbackQueryHandler """
+    """ Handles Button inputs, it's just an alias for CallbackQueryHandler """
     pass
 
 
