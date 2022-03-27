@@ -1,6 +1,4 @@
-from typing import Dict
-
-from telegram.ext import CallbackQueryHandler, MessageHandler, Filters, ConversationHandler
+from telegram.ext import CallbackQueryHandler, MessageHandler, Filters
 
 from MateWrapper.generics import TelegramFunctionBlueprint
 
