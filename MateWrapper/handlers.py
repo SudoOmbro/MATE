@@ -1,12 +1,10 @@
-from typing import Dict
-
-from telegram.ext import CallbackQueryHandler, MessageHandler, Filters, ConversationHandler
+from telegram.ext import CallbackQueryHandler, MessageHandler, Filters
 
 from MateWrapper.generics import TelegramFunctionBlueprint
 
 
 class ButtonHandler(CallbackQueryHandler):
-    """ Handles Button inputs, it's just an alis for CallbackQueryHandler """
+    """ Handles Button inputs, it's just an alias for CallbackQueryHandler """
     pass
 
 
