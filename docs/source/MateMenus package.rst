@@ -27,6 +27,14 @@ Contains all the implementations of ``GenericPanel``.
    :members:
    :special-members: __init__
 
+panel decorators module
+-----------------------
+Defines some classes that can be used to wrap panels in order to add functionality in a convenient way.
+
+.. automodule:: MateMenus.panel_decorators
+   :members:
+   :special-members: __init__
+
 keyboards module
 ----------------
 Contains functions useful for generation keyboards from data.

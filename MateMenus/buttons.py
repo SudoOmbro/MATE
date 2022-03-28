@@ -13,8 +13,8 @@ class GotoButton(Button):
 
     handler: Handler
 
-    def __init__(self, text: str, next_panel: str):
-        super().__init__(text)
+    def __init__(self, text: str, next_panel: str, custom_handle: str or None = None):
+        super().__init__(text, custom_handle=custom_handle)
         self.next_panel = next_panel
 
     def compile(self, context: MenuContext):
@@ -42,8 +42,8 @@ class UrlButton(Button):
 class FuncButton(Button):
     """ button that executes a function (or a chain of functions) when clicked """
 
-    def __init__(self, text: str, function: callable):
-        super().__init__(text)
+    def __init__(self, text: str, function: callable, custom_handle: str or None = None):
+        super().__init__(text, custom_handle=custom_handle)
         if not function:
             raise ValueError("The function cannot be None")
         self.func = function
@@ -59,7 +59,13 @@ class InputButton(Button):
 
     current_panel: "GenericPanel"
 
-    def __init__(self, text: str, prompt: Prompt, input_handlers: Handler or List[Handler]):
+    def __init__(
+            self,
+            text: str,
+            prompt: Prompt,
+            input_handlers: Handler or List[Handler],
+            custom_handle: str or None = None
+    ):
         """
         :param text (str):
             The text that will be shown in the button
@@ -68,7 +74,7 @@ class InputButton(Button):
         :param input_handle (Handler or List[Handler]):
             The function(s) that will be used to handle the user's input
         """
-        super().__init__(text)
+        super().__init__(text, custom_handle=custom_handle)
         self.prompt: Prompt = prompt
         if not input_handlers:
             raise ValueError("You must pass at least one input handler")

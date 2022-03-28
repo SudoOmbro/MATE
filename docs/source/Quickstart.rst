@@ -233,9 +233,9 @@ How was it achieved? Let's look at the various components:
 Advanced usage
 --------------
 This section will talk a bit about some of the more advanced features of MATE,
-for an example that uses **all of them** refer to:
+for an example that uses **most of them** refer to:
 
-.. automodule:: tests.todo_list_bot_sample
+.. automodule:: samples.todo_list_bot
     :members:
 
 Chains
@@ -256,6 +256,13 @@ can find reference at the start of this paragraph.
 Useful if you want to build an highly custom and dynamic panel inside your menu.
 
 See ``CustomPanel`` in :ref:`MateMenus package:panels module` for more info.
+
+Decorating Panels
+~~~~~~~~~~~~~~~~~
+All panels can be decorated (wrapped by another kind of panel) by using panel decorators; These classes can be used
+to easily add functionality to an entire panel without repeating yourself.
+
+See :ref:`MateMenus package:panel decorators module` for more info.
 
 Generating keyboards from lists
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

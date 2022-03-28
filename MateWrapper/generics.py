@@ -88,4 +88,3 @@ class TelegramUserError(Exception):
 
     It's handled automatically by the default error handler, but you can implement your own handler.
     """
-    pass

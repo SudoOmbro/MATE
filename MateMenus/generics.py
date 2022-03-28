@@ -1,10 +1,10 @@
 from functools import cache
-from typing import List, Dict
+from typing import List, Dict, Callable
 
-from telegram import InlineKeyboardButton
-from telegram.ext import ConversationHandler, Handler, CallbackQueryHandler
+from telegram import InlineKeyboardButton, Update
+from telegram.ext import ConversationHandler, Handler, CallbackQueryHandler, CallbackContext
 
-from MateWrapper.generics import Chain
+from MateWrapper.generics import Chain, TelegramEvent, TelegramUserError
 from MateWrapper.globals import Globals
 from MateWrapper.prompts import Prompt
 
@@ -42,16 +42,19 @@ class MenuContext:
 class Button:
     """ generic keyboard button class to implement """
 
-    def __init__(self, text: str):
+    def __init__(self, text: str, custom_handle: str or None = None):
         """
         sets the buttons text & generates a unique handle (callback pattern) for this button.
 
-        :param str text: the text that will be shown on the button (Long texts will be shortened)
+        :param str text:
+            the text that will be shown on the button (Long texts will be shortened).
+        :param str or None custom_handle:
+            Sets a custom handle for the button instead of autogenerating it.
         """
         if not text:
             raise ValueError("A button needs some text in it")
         self.text: str = text
-        self.handle: str = _get_button_handle()
+        self.handle: str = custom_handle if custom_handle else _get_button_handle()
 
     def compile(self, context: MenuContext):
         """
@@ -145,3 +148,25 @@ class Menu(ConversationHandler):
         for panel_name in panels:
             self.states[panel_name] = panels[panel_name].get_handlers(MenuContext(self, panels[panel_name], panels))
         return result
+
+
+class AuthCheck:
+    """ Configurable function that allows to check for some kind of authentication """
+
+    def __init__(self, auth_function: Callable[[TelegramEvent], bool], error_text: str):
+        """
+        :param Callable[[TelegramEvent], bool] auth_function:
+            The function used to authenticate the user; It should return True if the user was authenticated, else False.
+        :param str or None error_text:
+            The Text the user will be shown if auth_function returns False.
+            By default, it shows "Access denied".
+        :returns: None if the authorization was successful
+        :raises: TelegramUserError if the authorization was not successful.
+        """
+        self.auth_function = auth_function
+        self.error_text = error_text if error_text else "Access denied"
+
+    def __call__(self, update: Update, context: CallbackContext):
+        if self.auth_function(TelegramEvent(update, context)):
+            return
+        raise TelegramUserError(self.error_text)

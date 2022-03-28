@@ -7,7 +7,6 @@ from MateMenus.generics import GenericPanel, Button, MenuContext, get_back_butto
 from MateWrapper.generics import TelegramEvent, Chain
 from MateWrapper.globals import Globals
 from MateWrapper.prompts import Prompt
-from build.lib.MateWrapper.menus import _MenuContext
 from tests.formatting import CallbackContext, Update
 
 
@@ -104,7 +103,7 @@ class GOTO:
     def __init__(self, destination_panel: str):
         self.destination_panel = destination_panel
 
-    def compile(self, context: _MenuContext):
+    def compile(self, context: MenuContext):
         if self.destination_panel not in context.panels:
             raise ValueError(f"The specified panel '{self.destination_panel}' is not defined")
         self.prompt = context.panels[self.destination_panel].prompt
@@ -127,7 +126,7 @@ class CustomPanel(GenericPanel):
         if self.auto_handle_state:
             self.prompt.next_state = current_state
 
-    def get_handlers(self, context: _MenuContext) -> List[Handler]:
+    def get_handlers(self, context: MenuContext) -> List[Handler]:
         for handler in self.handlers:
             if type(handler.callback) == Chain:
                 for func in handler.callback.functions:

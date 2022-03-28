@@ -3,6 +3,11 @@ _The Easy Telegram Application Maker_
 
 ```pip install mate-wrapper```
 
+<p align="center">
+  &emsp;
+    <a href="#"><img alt="Python" src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white"></a>
+</p>
+
 Welcome to MATE, the open source wrapper for the 
 [PythonTelegramBot wrapper](https://github.com/python-telegram-bot/python-telegram-bot)
 that makes building telegram applications very **easy** and **intuitive** by adopting 
@@ -54,6 +59,8 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+Pretty easy right? Take a look at the bots found in the samples folder 
+and see for yourself how easy it still is to make complex bots ;)
 
 ## Docs
 
@@ -61,4 +68,4 @@ Read the documentation [here](https://matewrapper.readthedocs.io/en/latest/)!
 
 ## Contributing
 
-IDK how this works yet but if there is any interest in the project i'll look into it :)
+Feel free to contribute with any fixes/suggestions, I'll get to them as soon as i have time!
