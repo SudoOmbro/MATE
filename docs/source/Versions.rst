@@ -6,6 +6,11 @@ History
 -------
 A list of all the changes follows
 
+1.2.1 (latest)
+~~~~~~~~~~~~~~
+released **29/03/2022**
+
+- Fixed & optimized some imports
 
 1.2.0 (latest)
 ~~~~~~~~~~~~~~
