@@ -1,13 +1,12 @@
 from typing import Callable, Union, List
 
-from telegram import InlineKeyboardMarkup, InlineKeyboardButton
-from telegram.ext import Handler
+from telegram import InlineKeyboardMarkup, InlineKeyboardButton, Update
+from telegram.ext import Handler, CallbackContext
 
 from MateMenus.generics import GenericPanel, Button, MenuContext, get_back_button_handler
 from MateWrapper.generics import TelegramEvent, Chain
 from MateWrapper.globals import Globals
 from MateWrapper.prompts import Prompt
-from tests.formatting import CallbackContext, Update
 
 
 class Panel(GenericPanel):

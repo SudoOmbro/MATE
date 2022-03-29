@@ -262,7 +262,7 @@ Decorating Panels
 All panels can be decorated (wrapped by another kind of panel) by using panel decorators; These classes can be used
 to easily add functionality to an entire panel without repeating yourself.
 
-See :ref:`MateMenus package:panel decorators module` for more info.
+See :ref:`MateMenus package:panel_decorators module` for more info.
 
 Generating keyboards from lists
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

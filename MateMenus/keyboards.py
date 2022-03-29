@@ -2,7 +2,6 @@ from typing import List, Callable, Union, TypeVar
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-from MateWrapper.generics import TelegramEvent
 from MateWrapper.globals import Globals
 
 
