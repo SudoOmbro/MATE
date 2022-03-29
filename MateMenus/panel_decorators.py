@@ -10,7 +10,7 @@ from MateWrapper.prompts import Prompt
 
 class Decorated(GenericPanel):
     """
-    A Wrapper of GenericPanel that adds ``function`` to the start/end of every function in wrapped_panel.
+    A Wrapper of GenericPanel that adds the passed function to the start/end of every function in wrapped_panel.
     """
 
     def __init__(
@@ -50,8 +50,8 @@ class Decorated(GenericPanel):
 
 class Private(Decorated):
     """
-    A ready-made wrapper of GenericPanel useful for building "private"
-    Panels that require some kind of authentication to access.
+    A ready-made wrapper of GenericPanel useful for building
+    panels that require some kind of authentication to access.
     """
 
     def __init__(
