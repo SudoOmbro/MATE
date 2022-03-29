@@ -20,7 +20,7 @@ class GetVariableGeneric(TelegramFunctionBlueprint):
             custom_setter_function: Union[Callable[[object, str], object], None] = None
     ):
         """
-        :param var_name:
+        :param str or None var_name:
             name of the variable to store, this will be put in context.chat_data
 
             if you pass None (and return value is None), this handler will just return the retrieved value. Useful in
@@ -49,7 +49,9 @@ class GetVariableGeneric(TelegramFunctionBlueprint):
 
             func(input, var_name: str)
                 ...
+
                 next_state: int = 1
+
                 return next_state
         """
         # set transformation
@@ -116,20 +118,12 @@ class GetText(GetVariableGeneric):
             custom_setter_function: callable or None = None
     ):
         """
-        :param str or None var_name:
-            see GetVariableGeneric
-        :param callable or None transformation_function:
-            see GetVariableGeneric
         :param str validation_regex:
             The regular expression used to validate the text input.
             Leave empty if you don't want to validate
         :param str error_message:
             The error message to send the user in case the given input wasn't validated correctly.
             Leave empty for a default, generic response
-        :param object or None next_state:
-            see GetVariableGeneric
-        :param callable or None custom_setter_function:
-            see GetVariableGeneric
         :raise TelegramUserError:
             if validation is enabled and the given text doesn't match
             the given regex this function will raise a TelegramUserError with the given error_message as error message.

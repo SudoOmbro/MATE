@@ -24,8 +24,8 @@ def get_back_button_handler(current_panel: "GenericPanel") -> CallbackQueryHandl
     """
     returns a Handler for BACK_PATTERN that returns the user to current_panel
 
-    :param current_panel: the destination panel
-    :return: a handler for BACK_PATTERN that returns the user to current_panel
+    :param GenericPanel current_panel: the destination panel
+    :return: a CallbackQueryHandler for BACK_PATTERN that returns the user to current_panel
     """
     return CallbackQueryHandler(current_panel.prompt, pattern=Globals.BACK_PATTERN)
 
@@ -160,8 +160,8 @@ class AuthCheck:
         :param str or None error_text:
             The Text the user will be shown if auth_function returns False.
             By default, it shows "Access denied".
-        :returns: None if the authorization was successful
-        :raises: TelegramUserError if the authorization was not successful.
+        :return: None if the authorization was successful
+        :raise: TelegramUserError if the authorization was not successful.
         """
         self.auth_function = auth_function
         self.error_text = error_text if error_text else "Access denied"

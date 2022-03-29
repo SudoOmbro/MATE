@@ -48,7 +48,7 @@ class Decorated(GenericPanel):
         return handlers
 
 
-class Private(Decorated):
+class Auth(Decorated):
     """
     A ready-made wrapper of GenericPanel useful for building
     panels that require some kind of authentication to access.
@@ -64,8 +64,8 @@ class Private(Decorated):
         :param GenericPanel wrapped_panel:
             the panel wrapped by this class.
         :param Callable[[TelegramEvent], bool] auth_function:
-            see ``AuthCheck``.
+            see AuthCheck.
         :param str or None error_text:
-            see ``AuthCheck``.
+            see AuthCheck.
         """
         super().__init__(wrapped_panel, AuthCheck(auth_function, error_text))
