@@ -1,7 +1,7 @@
 MateWrapper
 ===========
 This package contains all the basic classes that wrap around the python telegram bot ext package
-to ease bot development, like handlers, prompts & getters
+to ease bot development, like handlers, prompts & getters.
 
 bot module
 ----------

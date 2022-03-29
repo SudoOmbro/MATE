@@ -1,5 +1,5 @@
 MateMenus
-===========
+=========
 This package is an extension to :doc:`MateWrapper package` and provides functions & classes useful for
 easily building complex menu based interfaces. This basically makes MATE it's own framework.
 
@@ -27,7 +27,7 @@ Contains all the implementations of ``GenericPanel``.
    :members:
    :special-members: __init__
 
-panel decorators module
+panel_decorators module
 -----------------------
 Defines some classes that can be used to wrap panels in order to add functionality in a convenient way.
 
