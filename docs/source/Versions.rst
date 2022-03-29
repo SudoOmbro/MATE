@@ -12,7 +12,7 @@ released **29/03/2022**
 
 - Fixed & optimized some imports
 
-1.2.0 (latest)
+1.2.0
 ~~~~~~~~~~~~~~
 released **28/03/2022**
 
