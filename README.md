@@ -59,7 +59,7 @@ def main():
 if __name__ == "__main__":
     main()
 ```
-Pretty easy right? Take a look at the bots found in the samples folder 
+Pretty easy right? Take a look at the bots found in [samples](https://github.com/SudoOmbro/MATE/tree/main/samples)
 and see for yourself how easy it still is to make complex bots ;)
 
 ## Docs
