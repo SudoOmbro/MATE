@@ -233,10 +233,7 @@ How was it achieved? Let's look at the various components:
 Advanced usage
 --------------
 This section will talk a bit about some of the more advanced features of MATE,
-for an example that uses **most of them** refer to:
-
-.. automodule:: samples.todo_list_bot
-    :members:
+for an example that uses **most of them** refer to `The TODO list bot sample <https://github.com/SudoOmbro/MATE/blob/main/samples/todo_list_bot.py>`_
 
 Chains
 ~~~~~~
