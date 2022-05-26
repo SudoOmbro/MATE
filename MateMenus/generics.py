@@ -103,7 +103,7 @@ class Menu(ConversationHandler):
     """
     A menu, container for one or more (usually more) panels.
 
-    At init time it automatically "compiles" the panels into handlers & callback handlers to ensure maximum runtime
+    At init time it automatically "compiles" the panels into handlers and callback handlers to ensure maximum runtime
     performance while retaining the simplicity of the wrapper.
     """
 
